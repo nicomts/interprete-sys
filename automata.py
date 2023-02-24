@@ -26,8 +26,8 @@ def es_real(cadena):
              4: {'digito': 4, 'otro': 2, 'punto': 2}}
 
     for i in range(len(cadena)):
-        aux = caracter_a_simbolo(cadena[control])
-        estado_actual = delta[estado_actual][aux]
+        transicion = caracter_a_simbolo(cadena[control])
+        estado_actual = delta[estado_actual][transicion]
         control += 1
     if estado_actual in estados_finales:
         cadena_aceptada = True
