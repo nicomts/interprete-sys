@@ -1,12 +1,18 @@
 import re
 
+# re is the regular expression module
+# ord() function returns the value of the character in the ascii table
 
-def es_real(cadena):
+
+def es_real(fuente, control, lexema):
+    cadena_aceptada = False
     def caracter_a_simbolo(caracter):
-        es_digito = re.search('[0-9]', caracter)  # this regular expresion returns true if the character is a digit
+        es_digito = re.search('[0-9]', caracter)  # this regular expression returns true if the character is a digit
 
         if caracter == '.':
             return 'punto'
+        elif caracter == '-' or caracter == '+':
+            return 'signo'
         elif es_digito:
             return 'digito'
         else:
@@ -14,28 +20,38 @@ def es_real(cadena):
 
     estado_inicial = 0
     estados_finales = [1, 4]
+    estado_salida = 5
 
-    control = 0
+    control_local = control
     estado_actual = estado_inicial
 
     # This is the definition of the delta function(transitions) as a matrix of python dictionaries:
-    delta = {0: {'digito': 1, 'otro': 2, 'punto': 2},  # from state 0 through digito you go to state 1
-             1: {'digito': 1, 'otro': 2, 'punto': 3},
-             2: {'digito': 2, 'otro': 2, 'punto': 2},
-             3: {'digito': 4, 'otro': 2, 'punto': 2},
-             4: {'digito': 4, 'otro': 2, 'punto': 2}}
+    delta = {0: {'digito': 1, 'otro': 2, 'punto': 2, 'signo': 1},  # from state 0 through digito you go to state 1
+             1: {'digito': 1, 'otro': 5, 'punto': 3, 'signo': 5},
+             2: {'digito': 2, 'otro': 2, 'punto': 2, 'signo': 2},
+             3: {'digito': 4, 'otro': 2, 'punto': 2, 'signo': 2},
+             4: {'digito': 4, 'otro': 5, 'punto': 5, 'signo': 5},
+             5: {'digito': 5, 'otro': 5, 'punto': 5, 'signo': 5}}
 
-    for i in range(len(cadena)):
-        transicion = caracter_a_simbolo(cadena[control])
-        estado_actual = delta[estado_actual][transicion]
-        control += 1
-    if estado_actual in estados_finales:
+    while not estado_actual == estado_salida:
+        try:
+            caracter_automata = fuente[control_local]
+            transicion = caracter_a_simbolo(caracter_automata)
+            estado_actual = delta[estado_actual][transicion]
+            lexema = lexema + caracter_automata
+            control_local += 1
+        except IndexError:
+            break
+
+    if (estado_actual in estados_finales or estado_actual == estado_salida):
         cadena_aceptada = True
-        return cadena_aceptada
+        control = control_local
+    return [cadena_aceptada, control, lexema]
+
 
 
 def es_identificador(fuente, control, lexema):
-
+    cadena_aceptada = False
     # rules: identificador always starts with a letter, the rest can be letters or digits, no special symbols (not even _)
     def caracter_a_simbolo(caracter):
         es_digito = re.search('[0-9]', caracter)
@@ -77,7 +93,7 @@ def es_identificador(fuente, control, lexema):
     if (estado_actual in estados_finales or estado_actual == estado_salida):
         cadena_aceptada = True
         control = control + control_local
-        return [cadena_aceptada, control, lexema]
+    return [cadena_aceptada, control, lexema]
 
 
 def obtener_siguiente_componente_lexico (fuente, control):
@@ -96,7 +112,9 @@ def obtener_siguiente_componente_lexico (fuente, control):
     if fin_de_archivo == True:
         print('Fin de archivo')
     else:
+
         es_id = es_identificador(fuente, control, lexema)
+        real = es_real(fuente, control, lexema)
         if es_id[0] == True:
             print('Identificador reconocido')
             componente_lexico = 'Identificador'
@@ -104,7 +122,15 @@ def obtener_siguiente_componente_lexico (fuente, control):
             lexema = es_id[2]
             print(componente_lexico + ': ' + lexema)
 
+
             # instalar_en_ts(lexema, tabla_de_simbolos, componente_lexico)
+        elif real[0] == True:
+            componente_lexico = 'Constante Real'
+            control = real[1]
+            lexema = real[2]
+            print(componente_lexico + ': ' + lexema)
+
+
         else:
             print('No reconocio nada mas')
         # elif not es_simbolo_especial(fuente, control, lexema, componente_lexico):
@@ -114,13 +140,3 @@ def obtener_siguiente_componente_lexico (fuente, control):
 
 
 
-
-
-
-
-ruta_archivo = 'test.txt'
-archivo = open(ruta_archivo)
-fuente = archivo.read()
-control = 0
-control = obtener_siguiente_componente_lexico(fuente, control)
-control = obtener_siguiente_componente_lexico(fuente, control)
