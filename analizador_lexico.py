@@ -38,7 +38,10 @@ def es_real(fuente, control, lexema):
             caracter_automata = fuente[control_local]
             transicion = caracter_a_simbolo(caracter_automata)
             estado_actual = delta[estado_actual][transicion]
-            lexema = lexema + caracter_automata
+
+            # if i don't add 'estado_actual == 3' it won't add . to lexema
+            if (estado_actual in estados_finales or estado_actual == 3):
+                lexema = lexema + caracter_automata
             control_local += 1
         except IndexError:
             break
@@ -95,6 +98,48 @@ def es_identificador(fuente, control, lexema):
         control = control + control_local
     return [cadena_aceptada, control, lexema]
 
+def es_operador_relacional(fuente, control, lexema):
+    cadena_aceptada = False
+    def caracter_a_simbolo(caracter):
+        if caracter == '<':
+            return 'menor'
+        elif caracter == '>':
+            return 'mayor'
+        elif caracter == '=':
+            return 'igual'
+        else:
+            return 'otro'
+
+    estado_inicial = 0
+    estados_finales = [1, 2]
+    estado_salida = 6
+
+    control_local = control
+    estado_actual = estado_inicial
+
+    delta = {0: {'menor': 1, 'mayor': 4, 'igual': 3, 'otro': 5},
+             1: {'menor': 6, 'mayor': 2, 'igual': 2, 'otro': 6},
+             2: {'menor': 6, 'mayor': 6, 'igual': 6, 'otro': 6},
+             3: {'menor': 5, 'mayor': 5, 'igual': 2, 'otro': 5},
+             4: {'menor': 5, 'mayor': 5, 'igual': 2, 'otro': 5},
+             5: {'menor': 5, 'mayor': 5, 'igual': 5, 'otro': 5},
+             6: {'menor': 6, 'mayor': 6, 'igual': 6, 'otro': 6}}
+
+    while not estado_actual == estado_salida:
+        try:
+            caracter_automata = fuente[control_local]
+            transicion = caracter_a_simbolo(caracter_automata)
+            estado_actual = delta[estado_actual][transicion]
+            if estado_actual in estados_finales:
+                lexema = lexema + caracter_automata
+            control_local += 1
+        except IndexError:
+            break
+
+    if (estado_actual in estados_finales or estado_actual == estado_salida):
+        cadena_aceptada = True
+        control = control_local
+    return [cadena_aceptada, control, lexema]
 
 def obtener_siguiente_componente_lexico (fuente, control):
     fin_de_archivo = False
@@ -115,6 +160,8 @@ def obtener_siguiente_componente_lexico (fuente, control):
 
         es_id = es_identificador(fuente, control, lexema)
         real = es_real(fuente, control, lexema)
+        operador_relacional = es_operador_relacional(fuente, control, lexema)
+
         if es_id[0] == True:
             print('Identificador reconocido')
             componente_lexico = 'Identificador'
@@ -130,6 +177,11 @@ def obtener_siguiente_componente_lexico (fuente, control):
             lexema = real[2]
             print(componente_lexico + ': ' + lexema)
 
+        elif operador_relacional[0] == True:
+            componente_lexico = 'Operador relacional'
+            control = operador_relacional[1]
+            lexema = operador_relacional[2]
+            print(componente_lexico + ': ' + lexema)
 
         else:
             print('No reconocio nada mas')
