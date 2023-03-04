@@ -26,12 +26,13 @@ def es_real(fuente, control, lexema):
     estado_actual = estado_inicial
 
     # This is the definition of the delta function(transitions) as a matrix of python dictionaries:
-    delta = {0: {'digito': 1, 'otro': 2, 'punto': 2, 'signo': 1},  # from state 0 through digito you go to state 1
+    delta = {0: {'digito': 1, 'otro': 2, 'punto': 2, 'signo': 6},  # from state 0 through digito you go to state 1
              1: {'digito': 1, 'otro': 5, 'punto': 3, 'signo': 5},
              2: {'digito': 2, 'otro': 2, 'punto': 2, 'signo': 2},
              3: {'digito': 4, 'otro': 2, 'punto': 2, 'signo': 2},
              4: {'digito': 4, 'otro': 5, 'punto': 5, 'signo': 5},
-             5: {'digito': 5, 'otro': 5, 'punto': 5, 'signo': 5}}
+             5: {'digito': 5, 'otro': 5, 'punto': 5, 'signo': 5},
+             6: {'digito': 1, 'otro': 2, 'punto': 2, 'signo': 2}}
 
     while not estado_actual == estado_salida:
         try:
@@ -40,7 +41,7 @@ def es_real(fuente, control, lexema):
             estado_actual = delta[estado_actual][transicion]
 
             # if i don't add 'estado_actual == 3' it won't add . to lexema
-            if (estado_actual in estados_finales or estado_actual == 3):
+            if (estado_actual in estados_finales or estado_actual == 3 or estado_actual == 6):
                 lexema = lexema + caracter_automata
             control_local += 1
         except IndexError:
@@ -89,7 +90,6 @@ def es_identificador(fuente, control, lexema):
             if estado_actual in estados_finales:
                 lexema = lexema + caracter_automata
         except IndexError:
-            print('End of file in automaton')
             break
 
         control_local += 1
@@ -141,6 +141,52 @@ def es_operador_relacional(fuente, control, lexema):
         control = control_local
     return [cadena_aceptada, control, lexema]
 
+def es_operador_aritmetico(fuente, control, lexema):
+    cadena_aceptada = False
+    def caracter_a_simbolo(caracter):
+        if caracter == '+':
+            return 'suma'
+        elif caracter == '-':
+            return 'resta'
+        elif caracter == '*':
+            return 'multiplicacion'
+        elif caracter == '/':
+            return 'division'
+        else:
+            return 'otro'
+
+    estado_inicial = 0
+    estados_finales = [1, 2, 4]
+    estado_salida = 5
+
+    control_local = control
+    estado_actual = estado_inicial
+
+    delta = {0: {'suma': 1, 'resta': 1, 'multiplicacion': 2, 'division': 1, 'otro': 3},
+             1: {'suma': 5, 'resta': 5, 'multiplicacion': 5, 'division': 5, 'otro': 5},
+             2: {'suma': 5, 'resta': 5, 'multiplicacion': 4, 'division': 4, 'otro': 5},
+             3: {'suma': 3, 'resta': 3, 'multiplicacion': 3, 'division': 3, 'otro': 3},
+             4: {'suma': 5, 'resta': 5, 'multiplicacion': 5, 'division': 5, 'otro': 5},
+             5: {'suma': 5, 'resta': 5, 'multiplicacion': 5, 'division': 5, 'otro': 5}}
+
+    while not estado_actual == estado_salida:
+        try:
+            caracter_automata = fuente[control_local]
+            transicion = caracter_a_simbolo(caracter_automata)
+            estado_actual = delta[estado_actual][transicion]
+            if estado_actual in estados_finales:
+                lexema = lexema + caracter_automata
+            control_local += 1
+        except IndexError:
+            break
+
+    if (estado_actual in estados_finales or estado_actual == estado_salida):
+        cadena_aceptada = True
+        control = control_local
+    return [cadena_aceptada, control, lexema]
+
+
+
 def obtener_siguiente_componente_lexico (fuente, control):
     fin_de_archivo = False
     lexema = ''
@@ -161,9 +207,9 @@ def obtener_siguiente_componente_lexico (fuente, control):
         es_id = es_identificador(fuente, control, lexema)
         real = es_real(fuente, control, lexema)
         operador_relacional = es_operador_relacional(fuente, control, lexema)
+        operador_aritmetico = es_operador_aritmetico(fuente, control, lexema)
 
         if es_id[0] == True:
-            print('Identificador reconocido')
             componente_lexico = 'Identificador'
             control = es_id[1]
             lexema = es_id[2]
@@ -181,6 +227,12 @@ def obtener_siguiente_componente_lexico (fuente, control):
             componente_lexico = 'Operador relacional'
             control = operador_relacional[1]
             lexema = operador_relacional[2]
+            print(componente_lexico + ': ' + lexema)
+
+        elif operador_aritmetico[0] == True:
+            componente_lexico = 'Operador aritmetico'
+            control = operador_aritmetico[1]
+            lexema = operador_aritmetico[2]
             print(componente_lexico + ': ' + lexema)
 
         else:
