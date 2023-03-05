@@ -185,6 +185,42 @@ def es_operador_aritmetico(fuente, control, lexema):
         control = control_local
     return [cadena_aceptada, control, lexema]
 
+def es_cadena(fuente, control, lexema):
+    cadena_aceptada = False
+    def caracter_a_simbolo(caracter):
+        if caracter == '"':
+            return 'comilla'
+        else:
+            return 'caracter'
+
+    estado_inicial = 0
+    estados_finales = [2]
+    estado_salida = 4
+
+    control_local = control
+    estado_actual = estado_inicial
+
+    delta = {0: {'comilla': 1, 'caracter': 3, 'otro': 3},
+             1: {'comilla': 2, 'caracter': 1, 'otro': 3},
+             2: {'comilla': 4, 'caracter': 4, 'otro': 4},
+             3: {'comilla': 3, 'caracter': 3, 'otro': 3},
+             4: {'comilla': 4, 'caracter': 4, 'otro': 4}}
+
+    while not estado_actual == estado_salida:
+        try:
+            caracter_automata = fuente[control_local]
+            transicion = caracter_a_simbolo(caracter_automata)
+            estado_actual = delta[estado_actual][transicion]
+            if (estado_actual in estados_finales or estado_actual == 1):
+                lexema = lexema + caracter_automata
+            control_local += 1
+        except IndexError:
+            break
+
+    if (estado_actual in estados_finales or estado_actual == estado_salida):
+        cadena_aceptada = True
+        control = control_local
+    return [cadena_aceptada, control, lexema]
 
 
 def obtener_siguiente_componente_lexico (fuente, control):
@@ -208,6 +244,7 @@ def obtener_siguiente_componente_lexico (fuente, control):
         real = es_real(fuente, control, lexema)
         operador_relacional = es_operador_relacional(fuente, control, lexema)
         operador_aritmetico = es_operador_aritmetico(fuente, control, lexema)
+        cadena = es_cadena(fuente, control, lexema)
 
         if es_id[0] == True:
             componente_lexico = 'Identificador'
@@ -233,6 +270,12 @@ def obtener_siguiente_componente_lexico (fuente, control):
             componente_lexico = 'Operador aritmetico'
             control = operador_aritmetico[1]
             lexema = operador_aritmetico[2]
+            print(componente_lexico + ': ' + lexema)
+
+        elif cadena[0] == True:
+            componente_lexico = 'Cadena'
+            control = cadena[1]
+            lexema = cadena[2]
             print(componente_lexico + ': ' + lexema)
 
         else:
