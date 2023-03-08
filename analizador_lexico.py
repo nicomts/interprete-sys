@@ -1,4 +1,5 @@
 import re
+import tabla_de_simbolos
 
 # re is the regular expression module
 # ord() function returns the value of the character in the ascii table
@@ -223,7 +224,7 @@ def es_cadena(fuente, control, lexema):
     return [cadena_aceptada, control, lexema]
 
 
-def obtener_siguiente_componente_lexico (fuente, control):
+def obtener_siguiente_componente_lexico (fuente, control, tabla):
     fin_de_archivo = False
     lexema = ''
     try:
@@ -250,10 +251,9 @@ def obtener_siguiente_componente_lexico (fuente, control):
             componente_lexico = 'Identificador'
             control = es_id[1]
             lexema = es_id[2]
+            tabla_de_simbolos.instalar_en_tabla(tabla, componente_lexico, lexema)
             print(componente_lexico + ': ' + lexema)
 
-
-            # instalar_en_ts(lexema, tabla_de_simbolos, componente_lexico)
         elif real[0] == True:
             componente_lexico = 'Constante Real'
             control = real[1]
