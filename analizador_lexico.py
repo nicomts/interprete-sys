@@ -96,7 +96,7 @@ def es_identificador(fuente, control, lexema):
         control_local += 1
     if (estado_actual in estados_finales or estado_actual == estado_salida):
         cadena_aceptada = True
-        control = control + control_local
+        control = control_local
     return [cadena_aceptada, control, lexema]
 
 def es_operador_relacional(fuente, control, lexema):
@@ -223,6 +223,103 @@ def es_cadena(fuente, control, lexema):
         control = control_local
     return [cadena_aceptada, control, lexema]
 
+def es_simbolo_gramatical(fuente, control, lexema):
+    aceptado = False
+    control_local = control
+    caracter = fuente[control_local]
+    match caracter:
+        case '+':
+            componente_lexico = 'mas'
+            lexema = caracter
+            aceptado = True
+            control_local += 1
+            control = control_local
+        case '-':
+            componente_lexico = 'menos'
+            lexema = caracter
+            aceptado = True
+            control_local += 1
+            control = control_local
+        case '*':
+            componente_lexico = 'por'
+            lexema = caracter
+            aceptado = True
+            control_local += 1
+            control = control_local
+        case '/':
+            componente_lexico = 'dividido'
+            lexema = caracter
+            aceptado = True
+            control_local += 1
+            control = control_local
+        case '^':
+            componente_lexico = 'elevado'
+            lexema = caracter
+            aceptado = True
+            control_local += 1
+            control = control_local
+        case '=':
+            componente_lexico = 'igual'
+            lexema = caracter
+            aceptado = True
+            control_local += 1
+            control = control_local
+        case '(':
+            componente_lexico = 'parentesis_izquierdo'
+            lexema = caracter
+            aceptado = True
+            control_local += 1
+            control = control_local
+        case ')':
+            componente_lexico = 'parentesis_derecho'
+            lexema = caracter
+            aceptado = True
+            control_local += 1
+            control = control_local
+        case '[':
+            componente_lexico = 'corchete_izquierdo'
+            lexema = caracter
+            aceptado = True
+            control_local += 1
+            control = control_local
+        case ']':
+            componente_lexico = 'corchete_derecho'
+            lexema = caracter
+            aceptado = True
+            control_local += 1
+            control = control_local
+        case '{':
+            componente_lexico = 'llave_izquierda'
+            lexema = caracter
+            aceptado = True
+            control_local += 1
+            control = control_local
+        case '}':
+            componente_lexico = 'llave_derecha'
+            lexema = caracter
+            aceptado = True
+            control_local += 1
+            control = control_local
+        case ',':
+            componente_lexico = 'coma'
+            lexema = caracter
+            aceptado = True
+            control_local += 1
+            control = control_local
+        case ';':
+            componente_lexico = 'punto_coma'
+            lexema = caracter
+            aceptado = True
+            control_local += 1
+            control = control_local
+
+        case _: # Default action if it doesn't match the others
+            componente_lexico = 'Error léxico'
+            aceptado = False
+
+    return [aceptado, control, lexema, componente_lexico]
+
+
 
 def obtener_siguiente_componente_lexico (fuente, control, tabla):
     fin_de_archivo = False
@@ -246,6 +343,7 @@ def obtener_siguiente_componente_lexico (fuente, control, tabla):
         operador_relacional = es_operador_relacional(fuente, control, lexema)
         operador_aritmetico = es_operador_aritmetico(fuente, control, lexema)
         cadena = es_cadena(fuente, control, lexema)
+        simbolo_gramatical = es_simbolo_gramatical(fuente, control, lexema)
 
         if es_id[0] == True:
             componente_lexico = 'Identificador'
@@ -278,9 +376,13 @@ def obtener_siguiente_componente_lexico (fuente, control, tabla):
             lexema = cadena[2]
             print(componente_lexico + ': ' + lexema)
 
+        elif simbolo_gramatical[0]:
+            componente_lexico = simbolo_gramatical[3]
+            control = simbolo_gramatical[1]
+            lexema = simbolo_gramatical[2]
+            print(componente_lexico)
         else:
             componente_lexico = 'Error léxico'
-            print(componente_lexico)
 
 
     return control
