@@ -279,9 +279,9 @@ def obtener_siguiente_componente_lexico (fuente, control, tabla):
             print(componente_lexico + ': ' + lexema)
 
         else:
-            print('No reconocio nada mas')
-        # elif not es_simbolo_especial(fuente, control, lexema, componente_lexico):
-        #     componente_lexico = 'error lexico'
+            componente_lexico = 'Error léxico'
+            print(componente_lexico)
+
 
     return control
 
