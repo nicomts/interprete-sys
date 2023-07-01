@@ -142,40 +142,72 @@ def es_operador_relacional(fuente, control, lexema):
         control = control_local
     return [cadena_aceptada, control, lexema]
 
-def es_operador_aritmetico(fuente, control, lexema):
+def es_potencia(fuente, control, lexema):
     cadena_aceptada = False
     def caracter_a_simbolo(caracter):
-        if caracter == '+':
-            return 'suma'
-        elif caracter == '-':
-            return 'resta'
-        elif caracter == '*':
-            return 'multiplicacion'
-        elif caracter == '/':
-            return 'division'
+        if caracter == '*':
+            return 'asterisco'
         else:
             return 'otro'
 
     estado_inicial = 0
-    estados_finales = [1, 2, 4]
-    estado_salida = 5
+    estados_finales = [2]
+    estado_salida = 3
 
     control_local = control
     estado_actual = estado_inicial
 
-    delta = {0: {'suma': 1, 'resta': 1, 'multiplicacion': 2, 'division': 1, 'otro': 3},
-             1: {'suma': 5, 'resta': 5, 'multiplicacion': 5, 'division': 5, 'otro': 5},
-             2: {'suma': 5, 'resta': 5, 'multiplicacion': 4, 'division': 4, 'otro': 5},
-             3: {'suma': 3, 'resta': 3, 'multiplicacion': 3, 'division': 3, 'otro': 3},
-             4: {'suma': 5, 'resta': 5, 'multiplicacion': 5, 'division': 5, 'otro': 5},
-             5: {'suma': 5, 'resta': 5, 'multiplicacion': 5, 'division': 5, 'otro': 5}}
+    delta = {0: {'asterisco': 1, 'otro': 4},
+             1: {'asterisco': 2, 'otro': 4},
+             2: {'asterisco': 3, 'otro': 3},
+             3: {'asterisco': 3, 'otro': 3},
+             4: {'asterisco': 4, 'otro': 4}}
 
     while not estado_actual == estado_salida:
         try:
             caracter_automata = fuente[control_local]
             transicion = caracter_a_simbolo(caracter_automata)
             estado_actual = delta[estado_actual][transicion]
-            if estado_actual in estados_finales:
+            if (estado_actual in estados_finales or estado_actual == 1):
+                lexema = lexema + caracter_automata
+            control_local += 1
+        except IndexError:
+            break
+
+    if (estado_actual in estados_finales or estado_actual == estado_salida):
+        cadena_aceptada = True
+        control = control_local
+    return [cadena_aceptada, control, lexema]
+
+def es_raiz(fuente, control, lexema):
+    cadena_aceptada = False
+    def caracter_a_simbolo(caracter):
+        if caracter == '*':
+            return 'asterisco'
+        elif caracter == '/':
+            return 'barra'
+        else:
+            return 'otro'
+
+    estado_inicial = 0
+    estados_finales = [2]
+    estado_salida = 3
+
+    control_local = control
+    estado_actual = estado_inicial
+
+    delta = {0: {'asterisco': 1, 'barra': 4, 'otro': 4},
+             1: {'asterisco': 4, 'barra': 2, 'otro': 4},
+             2: {'asterisco': 3, 'barra': 3, 'otro': 3},
+             3: {'asterisco': 3, 'barra': 3, 'otro': 3},
+             4: {'asterisco': 4, 'barra': 4, 'otro': 4}}
+
+    while not estado_actual == estado_salida:
+        try:
+            caracter_automata = fuente[control_local]
+            transicion = caracter_a_simbolo(caracter_automata)
+            estado_actual = delta[estado_actual][transicion]
+            if (estado_actual in estados_finales or estado_actual == 1):
                 lexema = lexema + caracter_automata
             control_local += 1
         except IndexError:
@@ -341,8 +373,9 @@ def obtener_siguiente_componente_lexico (fuente, control, tabla):
         es_id = es_identificador(fuente, control, lexema)
         real = es_real(fuente, control, lexema)
         operador_relacional = es_operador_relacional(fuente, control, lexema)
-        operador_aritmetico = es_operador_aritmetico(fuente, control, lexema)
         cadena = es_cadena(fuente, control, lexema)
+        potencia = es_potencia(fuente, control, lexema)
+        raiz = es_raiz(fuente, control, lexema)
         simbolo_gramatical = es_simbolo_gramatical(fuente, control, lexema)
 
         if es_id[0] == True:
@@ -364,10 +397,16 @@ def obtener_siguiente_componente_lexico (fuente, control, tabla):
             lexema = operador_relacional[2]
             print(componente_lexico + ': ' + lexema)
 
-        elif operador_aritmetico[0] == True:
-            componente_lexico = 'Operador aritmetico'
-            control = operador_aritmetico[1]
-            lexema = operador_aritmetico[2]
+        elif potencia[0] == True:
+            componente_lexico = 'Potencia'
+            control = potencia[1]
+            lexema = potencia[2]
+            print(componente_lexico + ': ' + lexema)
+
+        elif raiz[0] == True:
+            componente_lexico = 'Raiz'
+            control = raiz[1]
+            lexema = raiz[2]
             print(componente_lexico + ': ' + lexema)
 
         elif cadena[0] == True:
