@@ -12,8 +12,6 @@ def es_real(fuente, control, lexema):
 
         if caracter == '.':
             return 'punto'
-        elif caracter == '-' or caracter == '+':
-            return 'signo'
         elif es_digito:
             return 'digito'
         else:
@@ -27,13 +25,13 @@ def es_real(fuente, control, lexema):
     estado_actual = estado_inicial
 
     # This is the definition of the delta function(transitions) as a matrix of python dictionaries:
-    delta = {0: {'digito': 1, 'otro': 2, 'punto': 2, 'signo': 6},  # from state 0 through digito you go to state 1
-             1: {'digito': 1, 'otro': 5, 'punto': 3, 'signo': 5},
-             2: {'digito': 2, 'otro': 2, 'punto': 2, 'signo': 2},
-             3: {'digito': 4, 'otro': 2, 'punto': 2, 'signo': 2},
-             4: {'digito': 4, 'otro': 5, 'punto': 5, 'signo': 5},
-             5: {'digito': 5, 'otro': 5, 'punto': 5, 'signo': 5},
-             6: {'digito': 1, 'otro': 2, 'punto': 2, 'signo': 2}}
+    delta = {0: {'digito': 1, 'otro': 2, 'punto': 2},  # from state 0 through digito you go to state 1
+             1: {'digito': 1, 'otro': 5, 'punto': 3},
+             2: {'digito': 2, 'otro': 2, 'punto': 2},
+             3: {'digito': 4, 'otro': 2, 'punto': 2},
+             4: {'digito': 4, 'otro': 5, 'punto': 5},
+             5: {'digito': 5, 'otro': 5, 'punto': 5},
+             6: {'digito': 1, 'otro': 2, 'punto': 2}}
 
     while not estado_actual == estado_salida:
         try:
