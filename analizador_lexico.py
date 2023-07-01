@@ -192,7 +192,7 @@ def es_cadena(fuente, control, lexema):
         if caracter == '"':
             return 'comilla'
         else:
-            return 'caracter'
+            return 'otro'
 
     estado_inicial = 0
     estados_finales = [2]
@@ -201,11 +201,11 @@ def es_cadena(fuente, control, lexema):
     control_local = control
     estado_actual = estado_inicial
 
-    delta = {0: {'comilla': 1, 'caracter': 3, 'otro': 3},
-             1: {'comilla': 2, 'caracter': 1, 'otro': 3},
-             2: {'comilla': 4, 'caracter': 4, 'otro': 4},
-             3: {'comilla': 3, 'caracter': 3, 'otro': 3},
-             4: {'comilla': 4, 'caracter': 4, 'otro': 4}}
+    delta = {0: {'comilla': 1, 'otro': 3},
+             1: {'comilla': 2, 'otro': 1},
+             2: {'comilla': 4, 'otro': 4},
+             3: {'comilla': 3, 'otro': 3},
+             4: {'comilla': 4, 'otro': 4}}
 
     while not estado_actual == estado_salida:
         try:
