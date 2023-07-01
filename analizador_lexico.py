@@ -112,7 +112,7 @@ def es_operador_relacional(fuente, control, lexema):
             return 'otro'
 
     estado_inicial = 0
-    estados_finales = [1, 2]
+    estados_finales = [1, 2, 4]
     estado_salida = 6
 
     control_local = control
@@ -122,7 +122,7 @@ def es_operador_relacional(fuente, control, lexema):
              1: {'menor': 6, 'mayor': 2, 'igual': 2, 'otro': 6},
              2: {'menor': 6, 'mayor': 6, 'igual': 6, 'otro': 6},
              3: {'menor': 5, 'mayor': 5, 'igual': 2, 'otro': 5},
-             4: {'menor': 5, 'mayor': 5, 'igual': 2, 'otro': 5},
+             4: {'menor': 6, 'mayor': 6, 'igual': 2, 'otro': 6},
              5: {'menor': 5, 'mayor': 5, 'igual': 5, 'otro': 5},
              6: {'menor': 6, 'mayor': 6, 'igual': 6, 'otro': 6}}
 
