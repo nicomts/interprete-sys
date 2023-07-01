@@ -22,6 +22,11 @@ Operador relacional
 
 ![](/img/afd_operador_relacional.png)
 
-Operador aritmético
+Potencia
 
-![](/img/afd_operador_aritmetico.png)
+![](/img/afd_potencia.png)
+
+Raiz
+
+![](/img/afd_raiz.png)
+
