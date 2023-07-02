@@ -33,18 +33,16 @@ def es_real(fuente, control, lexema):
              5: {'digito': 5, 'otro': 5, 'punto': 5},
              6: {'digito': 1, 'otro': 2, 'punto': 2}}
 
-    while not estado_actual == estado_salida:
-        try:
-            caracter_automata = fuente[control_local]
-            transicion = caracter_a_simbolo(caracter_automata)
-            estado_actual = delta[estado_actual][transicion]
+    while (not (estado_actual == estado_salida)) and (control_local < len(fuente)):
+        caracter_automata = fuente[control_local]
+        transicion = caracter_a_simbolo(caracter_automata)
+        estado_actual = delta[estado_actual][transicion]
 
-            # if i don't add 'estado_actual == 3' it won't add . to lexema
-            if (estado_actual in estados_finales or estado_actual == 3 or estado_actual == 6):
-                lexema = lexema + caracter_automata
-            control_local += 1
-        except IndexError:
-            break
+        # if i don't add 'estado_actual == 3' it won't add . to lexema
+        if (estado_actual in estados_finales or estado_actual == 3 or estado_actual == 6):
+            lexema = lexema + caracter_automata
+        control_local += 1
+
 
     if (estado_actual in estados_finales or estado_actual == estado_salida):
         cadena_aceptada = True
@@ -81,15 +79,14 @@ def es_identificador(fuente, control, lexema):
              3: {'letra': 3, 'digito': 3, 'otro': 3}
              }
 
-    while not (estado_actual == estado_salida):
-        try:
-            caracter_automata = fuente[control_local]
-            transicion = caracter_a_simbolo(caracter_automata)
-            estado_actual = delta[estado_actual][transicion]
-            if estado_actual in estados_finales:
-                lexema = lexema + caracter_automata
-        except IndexError:
-            break
+    while (not (estado_actual == estado_salida)) and (control_local < len(fuente)):
+
+        caracter_automata = fuente[control_local]
+        transicion = caracter_a_simbolo(caracter_automata)
+        estado_actual = delta[estado_actual][transicion]
+        if estado_actual in estados_finales:
+            lexema = lexema + caracter_automata
+
 
         control_local += 1
     if (estado_actual in estados_finales or estado_actual == estado_salida):
@@ -124,16 +121,14 @@ def es_operador_relacional(fuente, control, lexema):
              5: {'menor': 5, 'mayor': 5, 'igual': 5, 'otro': 5},
              6: {'menor': 6, 'mayor': 6, 'igual': 6, 'otro': 6}}
 
-    while not estado_actual == estado_salida:
-        try:
-            caracter_automata = fuente[control_local]
-            transicion = caracter_a_simbolo(caracter_automata)
-            estado_actual = delta[estado_actual][transicion]
-            if estado_actual in estados_finales:
-                lexema = lexema + caracter_automata
-            control_local += 1
-        except IndexError:
-            break
+    while (not (estado_actual == estado_salida)) and (control_local < len(fuente)):
+        caracter_automata = fuente[control_local]
+        transicion = caracter_a_simbolo(caracter_automata)
+        estado_actual = delta[estado_actual][transicion]
+        if estado_actual in estados_finales:
+            lexema = lexema + caracter_automata
+        control_local += 1
+
 
     if (estado_actual in estados_finales or estado_actual == estado_salida):
         cadena_aceptada = True
@@ -161,16 +156,15 @@ def es_potencia(fuente, control, lexema):
              3: {'asterisco': 3, 'otro': 3},
              4: {'asterisco': 4, 'otro': 4}}
 
-    while not estado_actual == estado_salida:
-        try:
-            caracter_automata = fuente[control_local]
-            transicion = caracter_a_simbolo(caracter_automata)
-            estado_actual = delta[estado_actual][transicion]
-            if (estado_actual in estados_finales or estado_actual == 1):
-                lexema = lexema + caracter_automata
-            control_local += 1
-        except IndexError:
-            break
+    while (not (estado_actual == estado_salida)) and (control_local < len(fuente)):
+
+        caracter_automata = fuente[control_local]
+        transicion = caracter_a_simbolo(caracter_automata)
+        estado_actual = delta[estado_actual][transicion]
+        if (estado_actual in estados_finales or estado_actual == 1):
+            lexema = lexema + caracter_automata
+        control_local += 1
+
 
     if (estado_actual in estados_finales or estado_actual == estado_salida):
         cadena_aceptada = True
@@ -200,16 +194,14 @@ def es_raiz(fuente, control, lexema):
              3: {'asterisco': 3, 'barra': 3, 'otro': 3},
              4: {'asterisco': 4, 'barra': 4, 'otro': 4}}
 
-    while not estado_actual == estado_salida:
-        try:
-            caracter_automata = fuente[control_local]
-            transicion = caracter_a_simbolo(caracter_automata)
-            estado_actual = delta[estado_actual][transicion]
-            if (estado_actual in estados_finales or estado_actual == 1):
-                lexema = lexema + caracter_automata
-            control_local += 1
-        except IndexError:
-            break
+    while (not (estado_actual == estado_salida)) and (control_local < len(fuente)):
+        caracter_automata = fuente[control_local]
+        transicion = caracter_a_simbolo(caracter_automata)
+        estado_actual = delta[estado_actual][transicion]
+        if (estado_actual in estados_finales or estado_actual == 1):
+            lexema = lexema + caracter_automata
+        control_local += 1
+
 
     if (estado_actual in estados_finales or estado_actual == estado_salida):
         cadena_aceptada = True
@@ -237,16 +229,14 @@ def es_cadena(fuente, control, lexema):
              3: {'comilla': 3, 'otro': 3},
              4: {'comilla': 4, 'otro': 4}}
 
-    while not estado_actual == estado_salida:
-        try:
-            caracter_automata = fuente[control_local]
-            transicion = caracter_a_simbolo(caracter_automata)
-            estado_actual = delta[estado_actual][transicion]
-            if (estado_actual in estados_finales or estado_actual == 1):
-                lexema = lexema + caracter_automata
-            control_local += 1
-        except IndexError:
-            break
+    while (not (estado_actual == estado_salida)) and (control_local < len(fuente)):
+        caracter_automata = fuente[control_local]
+        transicion = caracter_a_simbolo(caracter_automata)
+        estado_actual = delta[estado_actual][transicion]
+        if (estado_actual in estados_finales or estado_actual == 1):
+            lexema = lexema + caracter_automata
+        control_local += 1
+
 
     if (estado_actual in estados_finales or estado_actual == estado_salida):
         cadena_aceptada = True

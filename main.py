@@ -6,7 +6,7 @@ fuente = archivo.read()
 control_global = 0
 tabla = []
 tabla_de_simbolos.crear_tabla(tabla)
-for i in range(10):
+for i in range(14):
     control_global = analizador_lexico.obtener_siguiente_componente_lexico(fuente, control_global, tabla)
 
 
