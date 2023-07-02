@@ -7,7 +7,9 @@ control_global = 0
 tabla = []
 tabla_de_simbolos.crear_tabla(tabla)
 for i in range(14):
-    control_global = analizador_lexico.obtener_siguiente_componente_lexico(fuente, control_global, tabla)
+    aux = analizador_lexico.obtener_siguiente_componente_lexico(fuente, control_global, tabla)
+    control_global = aux[1]
+    print(aux[0] + ': ' + aux[2])
 
 
 # tabla = []

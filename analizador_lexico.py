@@ -344,6 +344,7 @@ def es_simbolo_gramatical(fuente, control, lexema):
 def obtener_siguiente_componente_lexico (fuente, control, tabla):
     fin_de_archivo = False
     lexema = ''
+    componente_lexico = ''
     try:
         caracter = fuente[control]
         while ord(caracter) in range(33): # this will skip control characters (blank spaces)
@@ -355,7 +356,7 @@ def obtener_siguiente_componente_lexico (fuente, control, tabla):
         fin_de_archivo = True
 
     if fin_de_archivo == True:
-        print('Fin de archivo')
+        componente_lexico = 'Fin de archivo'
     else:
 
         es_id = es_identificador(fuente, control, lexema)
@@ -371,48 +372,42 @@ def obtener_siguiente_componente_lexico (fuente, control, tabla):
             control = es_id[1]
             lexema = es_id[2]
             tabla_de_simbolos.instalar_en_tabla(tabla, componente_lexico, lexema)
-            print(componente_lexico + ': ' + lexema)
 
         elif real[0] == True:
             componente_lexico = 'Constante Real'
             control = real[1]
             lexema = real[2]
-            print(componente_lexico + ': ' + lexema)
 
         elif operador_relacional[0] == True:
             componente_lexico = 'Operador relacional'
             control = operador_relacional[1]
             lexema = operador_relacional[2]
-            print(componente_lexico + ': ' + lexema)
 
         elif potencia[0] == True:
             componente_lexico = 'Potencia'
             control = potencia[1]
             lexema = potencia[2]
-            print(componente_lexico + ': ' + lexema)
 
         elif raiz[0] == True:
             componente_lexico = 'Raiz'
             control = raiz[1]
             lexema = raiz[2]
-            print(componente_lexico + ': ' + lexema)
 
         elif cadena[0] == True:
             componente_lexico = 'Cadena'
             control = cadena[1]
             lexema = cadena[2]
-            print(componente_lexico + ': ' + lexema)
 
         elif simbolo_gramatical[0]:
             componente_lexico = simbolo_gramatical[3]
             control = simbolo_gramatical[1]
             lexema = simbolo_gramatical[2]
-            print(componente_lexico)
+
         else:
             componente_lexico = 'Error léxico'
 
 
-    return control
+    return [componente_lexico, control, lexema]
 
 
 
