@@ -7,6 +7,7 @@ import tabla_de_simbolos
 
 def es_real(fuente, control, lexema):
     cadena_aceptada = False
+
     def caracter_a_simbolo(caracter):
         es_digito = re.search('[0-9]', caracter)  # this regular expression returns true if the character is a digit
 
@@ -42,18 +43,16 @@ def es_real(fuente, control, lexema):
         if (estado_actual in estados_finales or estado_actual == 3 or estado_actual == 6):
             lexema = lexema + caracter_automata
         control_local += 1
-
-
     if (estado_actual in estados_finales or estado_actual == estado_salida):
         cadena_aceptada = True
         control = control_local
     return [cadena_aceptada, control, lexema]
 
 
-
 def es_identificador(fuente, control, lexema):
     cadena_aceptada = False
     # rules: identificador always starts with a letter, the rest can be letters or digits, no special symbols (not even _)
+
     def caracter_a_simbolo(caracter):
         es_digito = re.search('[0-9]', caracter)
         es_letra = re.search('[a-zA-Z]', caracter)
@@ -86,16 +85,16 @@ def es_identificador(fuente, control, lexema):
         estado_actual = delta[estado_actual][transicion]
         if estado_actual in estados_finales:
             lexema = lexema + caracter_automata
-
-
         control_local += 1
     if (estado_actual in estados_finales or estado_actual == estado_salida):
         cadena_aceptada = True
         control = control_local
     return [cadena_aceptada, control, lexema]
 
+
 def es_operador_relacional(fuente, control, lexema):
     cadena_aceptada = False
+
     def caracter_a_simbolo(caracter):
         if caracter == '<':
             return 'menor'
@@ -128,15 +127,15 @@ def es_operador_relacional(fuente, control, lexema):
         if estado_actual in estados_finales:
             lexema = lexema + caracter_automata
         control_local += 1
-
-
     if (estado_actual in estados_finales or estado_actual == estado_salida):
         cadena_aceptada = True
         control = control_local
     return [cadena_aceptada, control, lexema]
 
+
 def es_potencia(fuente, control, lexema):
     cadena_aceptada = False
+
     def caracter_a_simbolo(caracter):
         if caracter == '*':
             return 'asterisco'
@@ -164,15 +163,15 @@ def es_potencia(fuente, control, lexema):
         if (estado_actual in estados_finales or estado_actual == 1):
             lexema = lexema + caracter_automata
         control_local += 1
-
-
     if (estado_actual in estados_finales or estado_actual == estado_salida):
         cadena_aceptada = True
         control = control_local
     return [cadena_aceptada, control, lexema]
 
+
 def es_raiz(fuente, control, lexema):
     cadena_aceptada = False
+
     def caracter_a_simbolo(caracter):
         if caracter == '*':
             return 'asterisco'
@@ -201,15 +200,15 @@ def es_raiz(fuente, control, lexema):
         if (estado_actual in estados_finales or estado_actual == 1):
             lexema = lexema + caracter_automata
         control_local += 1
-
-
     if (estado_actual in estados_finales or estado_actual == estado_salida):
         cadena_aceptada = True
         control = control_local
     return [cadena_aceptada, control, lexema]
 
+
 def es_cadena(fuente, control, lexema):
     cadena_aceptada = False
+
     def caracter_a_simbolo(caracter):
         if caracter == '"':
             return 'comilla'
@@ -236,12 +235,11 @@ def es_cadena(fuente, control, lexema):
         if (estado_actual in estados_finales or estado_actual == 1):
             lexema = lexema + caracter_automata
         control_local += 1
-
-
     if (estado_actual in estados_finales or estado_actual == estado_salida):
         cadena_aceptada = True
         control = control_local
     return [cadena_aceptada, control, lexema]
+
 
 def es_simbolo_gramatical(fuente, control, lexema):
     aceptado = False
@@ -321,26 +319,23 @@ def es_simbolo_gramatical(fuente, control, lexema):
             control_local += 1
             control = control_local
 
-        case _: # Default action if it doesn't match the others
+        case _:  # Default action if it doesn't match the others
             componente_lexico = 'Error léxico'
             aceptado = False
 
     return [aceptado, control, lexema, componente_lexico]
 
 
-
-def obtener_siguiente_componente_lexico (fuente, control, tabla):
+def obtener_siguiente_componente_lexico(fuente, control, tabla):
     fin_de_archivo = False
     lexema = ''
     componente_lexico = ''
     try:
         caracter = fuente[control]
-        while ord(caracter) in range(33): # this will skip control characters (blank spaces)
+        while ord(caracter) in range(33):  # this will skip control characters (blank spaces)
             control += 1
             caracter = fuente[control]
-
-
-    except IndexError: # This will return end of file if the index of the array is out of range
+    except IndexError:  # This will return end of file if the index of the array is out of range
         fin_de_archivo = True
 
     if fin_de_archivo == True:
@@ -399,8 +394,4 @@ def obtener_siguiente_componente_lexico (fuente, control, tabla):
         else:
             componente_lexico = 'Error léxico'
 
-
     return [componente_lexico, control, lexema]
-
-
-
