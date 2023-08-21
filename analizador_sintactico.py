@@ -20,23 +20,24 @@ def analizador_sintactico(ruta_archivo):
 
     while not exito and not error:
         x = pila.pop()
-        if x in terminales:
+        if x.valor in terminales:
             if x.valor == a[0]:
                 control = a[1]
                 a = analizador_lexico.obtener_siguiente_componente_lexico(fuente, control, tabla)
             else:
                 error = True
-        elif x in variables:
-            if tas[x.valor, a[0]] is None:
+        elif x.valor in variables:
+            if a[0] not in tas[x.valor]:
                 error = True
             else:
-                for i in reversed(tas[x.valor, a[0]]):
-                    pila.append(i)
-                for i in tas[x.valor, a[0]]:
+                for i in reversed(tas[x.valor][a[0]]):
+                    nuevo_nodo = arbol.NodoArbol(i)
+                    pila.append(nuevo_nodo)
+                for i in tas[x.valor][a[0]]:
                     nuevo_nodo = arbol.NodoArbol(i)
                     x.hijos.append(nuevo_nodo)
 
         elif x.valor == '$':
             exito = True
 
-    return raiz
+    return [raiz, exito, error]

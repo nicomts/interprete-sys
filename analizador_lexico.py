@@ -368,28 +368,33 @@ def obtener_siguiente_componente_lexico (fuente, control, tabla):
         simbolo_gramatical = es_simbolo_gramatical(fuente, control, lexema)
 
         if es_id[0] == True:
-            componente_lexico = 'Identificador'
+            componente_lexico = 'id'
             control = es_id[1]
             lexema = es_id[2]
+
+            for i in tabla:
+                if i['lexema'] == lexema:
+                    componente_lexico = i['componente_lexico']
+
             tabla_de_simbolos.instalar_en_tabla(tabla, componente_lexico, lexema)
 
         elif real[0] == True:
-            componente_lexico = 'Constante Real'
+            componente_lexico = 'constanteReal'
             control = real[1]
             lexema = real[2]
 
         elif operador_relacional[0] == True:
-            componente_lexico = 'Operador relacional'
+            componente_lexico = 'operadorRelacional'
             control = operador_relacional[1]
             lexema = operador_relacional[2]
 
         elif potencia[0] == True:
-            componente_lexico = 'Potencia'
+            componente_lexico = '**'
             control = potencia[1]
             lexema = potencia[2]
 
         elif raiz[0] == True:
-            componente_lexico = 'Raiz'
+            componente_lexico = '*/'
             control = raiz[1]
             lexema = raiz[2]
 

@@ -2,8 +2,11 @@ from analizador_sintactico import *
 
 
 def test_analizador_sintactico():
-    ruta_archivo = 'test.txt'
-    arbol_derivacion = analizador_sintactico(ruta_archivo)
+    ruta_archivo = 'test2.txt'
+    a = analizador_sintactico(ruta_archivo)
+    arbol_derivacion = a[0]
+    exito = a[1]
+    error = a[2]
 
     def dfs(nodo):
         print(nodo.valor)
@@ -11,6 +14,11 @@ def test_analizador_sintactico():
             dfs(hijo)
 
     dfs(arbol_derivacion)
+
+    if exito:
+        print('Exito')
+    if error:
+        print('Error')
 
 
 test_analizador_sintactico()

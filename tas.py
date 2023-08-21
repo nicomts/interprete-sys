@@ -1,17 +1,18 @@
 tas = {
     '<Programa>': {
-        'var': ['<Declaraciones>', '<Cuerpo>']
+        'var': ['<Declaraciones>', '<Cuerpo>'],
+        '{': ['<Declaraciones>', '<Cuerpo>']
     },
     '<Declaraciones>': {
         'var': ['var', '<ListaVariables>'],
-        'Cadena': ['epsilon']
+        '{': ['epsilon']
     },
     '<ListaVariables>': {
         'id': ['id', '<FinListaVariables>']
     },
     '<FinListaVariables>': {
         ',': [',', 'id', '<FinListaVariables>'],
-        ';': ['epsilon']
+        '{': ['epsilon']
     },
     '<Cuerpo>': {
         '{': ['{', '<ListaSentencias>', '}']
@@ -22,7 +23,6 @@ tas = {
         'read': ['<Sentencia>', ';', '<ListaSentenciasFin>'],
         'if': ['<Sentencia>', ';', '<ListaSentenciasFin>'],
         'while': ['<Sentencia>', ';', '<ListaSentenciasFin>'],
-        'Cadena': ['<Sentencia>', ';', '<ListaSentenciasFin>']
     },
     '<ListaSentenciasFin>': {
         'id': ['<Sentencia>', ';', '<ListaSentenciasFin>'],
@@ -30,7 +30,6 @@ tas = {
         'read': ['<Sentencia>', ';', '<ListaSentenciasFin>'],
         'if': ['<Sentencia>', ';', '<ListaSentenciasFin>'],
         'while': ['<Sentencia>', ';', '<ListaSentenciasFin>'],
-        'Cadena': ['<Sentencia>', ';', '<ListaSentenciasFin>'],
         '}': ['epsilon']
     },
     '<Sentencia>': {
@@ -38,8 +37,7 @@ tas = {
         'write': ['<Escritura>'],
         'read': ['<Lectura>'],
         'if': ['<Condicional>'],
-        'while': ['<CicloMientras>'],
-        'Cadena': ['<Escritura>']
+        'while': ['<CicloMientras>']
     },
     '<Asignacion>': {
         'id': ['id', 'operadorAsignacion', '<ExpresionAritmetica>']
@@ -47,58 +45,62 @@ tas = {
     '<ExpresionAritmetica>': {
         'id': ['<OperandoSumaResta>', '<OperacionSumaResta>'],
         'constanteReal': ['<OperandoSumaResta>', '<OperacionSumaResta>'],
+        '-': ['<OperandoSumaResta>', '<OperacionSumaResta>'],
         '(': ['<OperandoSumaResta>', '<OperacionSumaResta>']
     },
     '<OperacionSumaResta>': {
+        '{': ['epsilon'],
+        ';': ['epsilon'],
         '+': ['+', '<OperandoSumaResta>', '<OperacionSumaResta>'],
         '-': ['-', '<OperandoSumaResta>', '<OperacionSumaResta>'],
         ')': ['epsilon'],
-        ';': ['epsilon'],
         'operadorRelacional': ['epsilon'],
         'and': ['epsilon'],
-        'or': ['epsilon']
+        'or': ['epsilon'],
+        ']': ['epsilon']
     },
     '<OperandoSumaResta>': {
         'id': ['<OperandoMultiplicacionDivision>', '<OperacionMultiplicacionDivision>'],
         'constanteReal': ['<OperandoMultiplicacionDivision>', '<OperacionMultiplicacionDivision>'],
+        '-': ['<OperandoMultiplicacionDivision>', '<OperacionMultiplicacionDivision>'],
         '(': ['<OperandoMultiplicacionDivision>', '<OperacionMultiplicacionDivision>']
     },
     '<OperacionMultiplicacionDivision>': {
-        '*': ['*', '<OperandoMultiplicacionDivision>', '<OperacionMultiplicacionDivision>'],
-        '/': ['/', '<OperandoMultiplicacionDivision>', '<OperacionMultiplicacionDivision>'],
+        '{': ['epsilon'],
+        ';': ['epsilon'],
         '+': ['epsilon'],
         '-': ['epsilon'],
+        '*': ['*', '<OperandoMultiplicacionDivision>', '<OperacionMultiplicacionDivision>'],
+        '/': ['/', '<OperandoMultiplicacionDivision>', '<OperacionMultiplicacionDivision>'],
         ')': ['epsilon'],
-        ';': ['epsilon'],
         'operadorRelacional': ['epsilon'],
         'and': ['epsilon'],
-        'or': ['epsilon']
+        'or': ['epsilon'],
+        ']': ['epsilon']
     },
     '<OperandoMultiplicacionDivision>': {
         'id': ['<OperandoPotenciaRaiz>', '<OperacionPotenciaRaiz>'],
         'constanteReal': ['<OperandoPotenciaRaiz>', '<OperacionPotenciaRaiz>'],
+        '-': ['<OperandoPotenciaRaiz>', '<OperacionPotenciaRaiz>'],
         '(': ['<OperandoPotenciaRaiz>', '<OperacionPotenciaRaiz>']
     },
     '<OperacionPotenciaRaiz>': {
-        '**': ['**', '<OperandoPotenciaRaiz>', '<OperacionPotenciaRaiz>'],
-        '*/': ['*/', '<OperandoPotenciaRaiz>', '<OperacionPotenciaRaiz>'],
-        '*': ['epsilon'],
-        '/': ['epsilon'],
+        '{': ['epsilon'],
+        ';': ['epsilon'],
         '+': ['epsilon'],
         '-': ['epsilon'],
+        '*': ['epsilon'],
+        '/': ['epsilon'],
+        '**': ['**', '<OperandoPotenciaRaiz>', '<OperacionPotenciaRaiz>'],
+        '*/': ['*/', '<OperandoPotenciaRaiz>', '<OperacionPotenciaRaiz>'],
         ')': ['epsilon'],
-        ';': ['epsilon'],
         'operadorRelacional': ['epsilon'],
         'and': ['epsilon'],
-        'or': ['epsilon']
+        'or': ['epsilon'],
+        ']': ['epsilon']
     },
     '<OperandoPotenciaRaiz>': {
-        'id': ['id', '<SiguientePorenciaRaiz>'],
-        'constanteReal': ['constanteReal'],
-        '-': ['-', '<OperandoPotenciaRaiz>'],
-        '(': ['(', '<ExpresionAritmetica>', ')']
-    },
-    '<SiguientePorenciaRaiz>': {
+        'id': ['id'],
         'constanteReal': ['constanteReal'],
         '-': ['-', '<OperandoPotenciaRaiz>'],
         '(': ['(', '<ExpresionAritmetica>', ')']
@@ -113,25 +115,30 @@ tas = {
         'if': ['if', '<Condicion>', '<Cuerpo>', '<FinCondicional>']
     },
     '<FinCondicional>': {
+        ';': ['epsilon'],
         'else': ['else', '<Cuerpo>'],
-        '}': ['epsilon']
     },
     '<Condicion>': {
         'id': ['<OperandoAndOr>', '<OperacionAndOr>'],
         'constanteReal': ['<OperandoAndOr>', '<OperacionAndOr>'],
+        '-': ['<OperandoAndOr>', '<OperacionAndOr>'],
         '(': ['<OperandoAndOr>', '<OperacionAndOr>'],
-        'not': ['not', '<OperandoAndOr>'],
-        '[': ['[', '<Condicion>', ']']
+        'not': ['<OperandoAndOr>', '<OperacionAndOr>'],
+        '[': ['<OperandoAndOr>', '<OperacionAndOr>']
+    },
+    '<OperacionAndOr>': {
+        '{': ['epsilon'],
+        'and': ['and', '<OperandoAndOr>', '<OperacionAndOr>'],
+        'or': ['or', '<OperandoAndOr>', '<OperacionAndOr>'],
+        ']': ['epsilon']
     },
     '<OperandoAndOr>': {
         'id': ['<ExpresionAritmetica>', 'operadorRelacional', '<ExpresionAritmetica>'],
         'constanteReal': ['<ExpresionAritmetica>', 'operadorRelacional', '<ExpresionAritmetica>'],
-        '(': ['<ExpresionAritmetica>', 'operadorRelacional', '<ExpresionAritmetica>']
-    },
-    '<OperacionAndOr>': {
-        'and': ['and', '<OperandoAndOr>'],
-        'or': ['or', '<OperandoAndOr>'],
-        ')': ['epsilon']
+        '-': ['<ExpresionAritmetica>', 'operadorRelacional', '<ExpresionAritmetica>'],
+        '(': ['<ExpresionAritmetica>', 'operadorRelacional', '<ExpresionAritmetica>'],
+        'not': ['not', '<OperandoAndOr>'],
+        '[': ['[', '<Condicion>', ']']
     },
     '<CicloMientras>': {
         'while': ['while', '<Condicion>', '<Cuerpo>']
