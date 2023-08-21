@@ -249,85 +249,73 @@ def es_simbolo_gramatical(fuente, control, lexema):
     caracter = fuente[control_local]
     match caracter:
         case '+':
-            componente_lexico = 'mas'
+            componente_lexico = '+'
             lexema = caracter
             aceptado = True
             control_local += 1
             control = control_local
         case '-':
-            componente_lexico = 'menos'
+            componente_lexico = '-'
             lexema = caracter
             aceptado = True
             control_local += 1
             control = control_local
         case '*':
-            componente_lexico = 'por'
+            componente_lexico = '*'
             lexema = caracter
             aceptado = True
             control_local += 1
             control = control_local
         case '/':
-            componente_lexico = 'dividido'
-            lexema = caracter
-            aceptado = True
-            control_local += 1
-            control = control_local
-        case '^':
-            componente_lexico = 'elevado'
-            lexema = caracter
-            aceptado = True
-            control_local += 1
-            control = control_local
-        case '=':
-            componente_lexico = 'igual'
+            componente_lexico = '/'
             lexema = caracter
             aceptado = True
             control_local += 1
             control = control_local
         case '(':
-            componente_lexico = 'parentesis_izquierdo'
+            componente_lexico = '('
             lexema = caracter
             aceptado = True
             control_local += 1
             control = control_local
         case ')':
-            componente_lexico = 'parentesis_derecho'
+            componente_lexico = ')'
             lexema = caracter
             aceptado = True
             control_local += 1
             control = control_local
         case '[':
-            componente_lexico = 'corchete_izquierdo'
+            componente_lexico = '['
             lexema = caracter
             aceptado = True
             control_local += 1
             control = control_local
         case ']':
-            componente_lexico = 'corchete_derecho'
+            componente_lexico = ']'
             lexema = caracter
             aceptado = True
             control_local += 1
             control = control_local
         case '{':
-            componente_lexico = 'llave_izquierda'
+            componente_lexico = '{'
             lexema = caracter
             aceptado = True
             control_local += 1
             control = control_local
         case '}':
-            componente_lexico = 'llave_derecha'
+            componente_lexico = '}'
             lexema = caracter
             aceptado = True
             control_local += 1
             control = control_local
         case ',':
-            componente_lexico = 'coma'
+            componente_lexico = ','
             lexema = caracter
             aceptado = True
             control_local += 1
             control = control_local
         case ';':
-            componente_lexico = 'punto_coma'
+            componente_lexico = ';'
             lexema = caracter
             aceptado = True
             control_local += 1
