@@ -41,11 +41,10 @@ def es_real(fuente, control, lexema):
         lexema = lexema + caracter_automata
         control_local += 1
     if estado_actual == estado_final:
-        lexema = lexema[:-1]  #This removes the last character
+        lexema = lexema[:-1]  # This removes the last character
         cadena_aceptada = True
         control = control_local - 1
     return [cadena_aceptada, control, lexema]
-
 
 
 def es_identificador(fuente, control, lexema):
@@ -66,8 +65,6 @@ def es_identificador(fuente, control, lexema):
     estado_inicial = 0
     estado_final = 3
     estado_muerto = 1
-
-
     control_local = control
     estado_actual = estado_inicial
 
@@ -85,7 +82,7 @@ def es_identificador(fuente, control, lexema):
         lexema = lexema + caracter_automata
         control_local += 1
     if estado_actual == estado_final:
-        lexema = lexema[:-1]  #This removes the last character
+        lexema = lexema[:-1]  # This removes the last character
         cadena_aceptada = True
         control = control_local - 1
 
@@ -127,11 +124,10 @@ def es_operador_relacional(fuente, control, lexema):
         lexema = lexema + caracter_automata
         control_local += 1
     if estado_actual == estado_final:
-        lexema = lexema[:-1]  #This removes the last character
+        lexema = lexema[:-1]  # This removes the last character
         cadena_aceptada = True
         control = control_local - 1
     return [cadena_aceptada, control, lexema]
-
 
 
 def es_potencia(fuente, control, lexema):
@@ -163,11 +159,10 @@ def es_potencia(fuente, control, lexema):
         lexema = lexema + caracter_automata
         control_local += 1
     if estado_actual == estado_final:
-        lexema = lexema[:-1]  #This removes the last character
+        lexema = lexema[:-1]  # This removes the last character
         cadena_aceptada = True
         control = control_local - 1
     return [cadena_aceptada, control, lexema]
-
 
 
 def es_raiz(fuente, control, lexema):
@@ -201,11 +196,10 @@ def es_raiz(fuente, control, lexema):
         lexema = lexema + caracter_automata
         control_local += 1
     if estado_actual == estado_final:
-        lexema = lexema[:-1]  #This removes the last character
+        lexema = lexema[:-1]  # This removes the last character
         cadena_aceptada = True
         control = control_local - 1
     return [cadena_aceptada, control, lexema]
-
 
 
 def es_cadena(fuente, control, lexema):
@@ -237,12 +231,10 @@ def es_cadena(fuente, control, lexema):
         lexema = lexema + caracter_automata
         control_local += 1
     if estado_actual == estado_final:
-        lexema = lexema[:-1]  #This removes the last character
+        lexema = lexema[:-1]  # This removes the last character
         cadena_aceptada = True
         control = control_local - 1
     return [cadena_aceptada, control, lexema]
-
-
 
 
 def es_simbolo_gramatical(fuente, control, lexema):
@@ -328,8 +320,6 @@ def es_simbolo_gramatical(fuente, control, lexema):
             aceptado = True
             control_local += 1
             control = control_local
-
-
         case _:  # Default action if it doesn't match the others
             componente_lexico = 'Error léxico'
             aceptado = False
@@ -349,7 +339,7 @@ def obtener_siguiente_componente_lexico(fuente, control, tabla):
     except IndexError:  # This will return end of file if the index of the array is out of range
         fin_de_archivo = True
 
-    if fin_de_archivo == True:
+    if fin_de_archivo is True:
         componente_lexico = 'Fin de archivo'
     else:
 
@@ -361,7 +351,7 @@ def obtener_siguiente_componente_lexico(fuente, control, tabla):
         raiz = es_raiz(fuente, control, lexema)
         simbolo_gramatical = es_simbolo_gramatical(fuente, control, lexema)
 
-        if es_id[0] == True:
+        if es_id[0] is True:
             componente_lexico = 'id'
             control = es_id[1]
             lexema = es_id[2]
@@ -372,27 +362,27 @@ def obtener_siguiente_componente_lexico(fuente, control, tabla):
 
             tabla_de_simbolos.instalar_en_tabla(tabla, componente_lexico, lexema)
 
-        elif real[0] == True:
+        elif real[0] is True:
             componente_lexico = 'constanteReal'
             control = real[1]
             lexema = real[2]
 
-        elif operador_relacional[0] == True:
+        elif operador_relacional[0] is True:
             componente_lexico = 'operadorRelacional'
             control = operador_relacional[1]
             lexema = operador_relacional[2]
 
-        elif potencia[0] == True:
+        elif potencia[0] is True:
             componente_lexico = '**'
             control = potencia[1]
             lexema = potencia[2]
 
-        elif raiz[0] == True:
+        elif raiz[0] is True:
             componente_lexico = '*/'
             control = raiz[1]
             lexema = raiz[2]
 
-        elif cadena[0] == True:
+        elif cadena[0] is True:
             componente_lexico = 'Cadena'
             control = cadena[1]
             lexema = cadena[2]
