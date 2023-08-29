@@ -19,8 +19,8 @@ def es_real(fuente, control, lexema):
             return 'otro'
 
     estado_inicial = 0
-    estados_finales = [1, 4]
-    estado_salida = 5
+    estado_final = 5
+    estado_muerto = 7
 
     control_local = control
     estado_actual = estado_inicial
@@ -34,19 +34,18 @@ def es_real(fuente, control, lexema):
              5: {'digito': 5, 'otro': 5, 'punto': 5},
              6: {'digito': 1, 'otro': 2, 'punto': 2}}
 
-    while (not (estado_actual == estado_salida)) and (control_local < len(fuente)):
+    while not estado_actual == estado_final and not estado_actual == estado_muerto and control_local < len(fuente):
         caracter_automata = fuente[control_local]
         transicion = caracter_a_simbolo(caracter_automata)
         estado_actual = delta[estado_actual][transicion]
-
-        # if i don't add 'estado_actual == 3' it won't add . to lexema
-        if (estado_actual in estados_finales or estado_actual == 3 or estado_actual == 6):
-            lexema = lexema + caracter_automata
+        lexema = lexema + caracter_automata
         control_local += 1
-    if (estado_actual in estados_finales or estado_actual == estado_salida):
+    if estado_actual == estado_final:
+        lexema = lexema[:-1]  #This removes the last character
         cadena_aceptada = True
-        control = control_local
+        control = control_local - 1
     return [cadena_aceptada, control, lexema]
+
 
 
 def es_identificador(fuente, control, lexema):
@@ -65,8 +64,9 @@ def es_identificador(fuente, control, lexema):
             return 'otro'
 
     estado_inicial = 0
-    estados_finales = [2]
-    estado_salida = 3
+    estado_final = 3
+    estado_muerto = 1
+
 
     control_local = control
     estado_actual = estado_inicial
@@ -78,17 +78,17 @@ def es_identificador(fuente, control, lexema):
              3: {'letra': 3, 'digito': 3, 'otro': 3}
              }
 
-    while (not (estado_actual == estado_salida)) and (control_local < len(fuente)):
-
+    while not estado_actual == estado_final and not estado_actual == estado_muerto and control_local < len(fuente):
         caracter_automata = fuente[control_local]
         transicion = caracter_a_simbolo(caracter_automata)
         estado_actual = delta[estado_actual][transicion]
-        if estado_actual in estados_finales:
-            lexema = lexema + caracter_automata
+        lexema = lexema + caracter_automata
         control_local += 1
-    if (estado_actual in estados_finales or estado_actual == estado_salida):
+    if estado_actual == estado_final:
+        lexema = lexema[:-1]  #This removes the last character
         cadena_aceptada = True
-        control = control_local
+        control = control_local - 1
+
     return [cadena_aceptada, control, lexema]
 
 
@@ -106,8 +106,8 @@ def es_operador_relacional(fuente, control, lexema):
             return 'otro'
 
     estado_inicial = 0
-    estados_finales = [1, 2, 4]
-    estado_salida = 6
+    estado_muerto = 5
+    estado_final = 6
 
     control_local = control
     estado_actual = estado_inicial
@@ -120,17 +120,18 @@ def es_operador_relacional(fuente, control, lexema):
              5: {'menor': 5, 'mayor': 5, 'igual': 5, 'otro': 5},
              6: {'menor': 6, 'mayor': 6, 'igual': 6, 'otro': 6}}
 
-    while (not (estado_actual == estado_salida)) and (control_local < len(fuente)):
+    while not estado_actual == estado_final and not estado_actual == estado_muerto and control_local < len(fuente):
         caracter_automata = fuente[control_local]
         transicion = caracter_a_simbolo(caracter_automata)
         estado_actual = delta[estado_actual][transicion]
-        if estado_actual in estados_finales:
-            lexema = lexema + caracter_automata
+        lexema = lexema + caracter_automata
         control_local += 1
-    if (estado_actual in estados_finales or estado_actual == estado_salida):
+    if estado_actual == estado_final:
+        lexema = lexema[:-1]  #This removes the last character
         cadena_aceptada = True
-        control = control_local
+        control = control_local - 1
     return [cadena_aceptada, control, lexema]
+
 
 
 def es_potencia(fuente, control, lexema):
@@ -143,8 +144,8 @@ def es_potencia(fuente, control, lexema):
             return 'otro'
 
     estado_inicial = 0
-    estados_finales = [2]
-    estado_salida = 3
+    estado_muerto = 4
+    estado_final = 3
 
     control_local = control
     estado_actual = estado_inicial
@@ -155,18 +156,18 @@ def es_potencia(fuente, control, lexema):
              3: {'asterisco': 3, 'otro': 3},
              4: {'asterisco': 4, 'otro': 4}}
 
-    while (not (estado_actual == estado_salida)) and (control_local < len(fuente)):
-
+    while not estado_actual == estado_final and not estado_actual == estado_muerto and control_local < len(fuente):
         caracter_automata = fuente[control_local]
         transicion = caracter_a_simbolo(caracter_automata)
         estado_actual = delta[estado_actual][transicion]
-        if (estado_actual in estados_finales or estado_actual == 1):
-            lexema = lexema + caracter_automata
+        lexema = lexema + caracter_automata
         control_local += 1
-    if (estado_actual in estados_finales or estado_actual == estado_salida):
+    if estado_actual == estado_final:
+        lexema = lexema[:-1]  #This removes the last character
         cadena_aceptada = True
-        control = control_local
+        control = control_local - 1
     return [cadena_aceptada, control, lexema]
+
 
 
 def es_raiz(fuente, control, lexema):
@@ -181,8 +182,8 @@ def es_raiz(fuente, control, lexema):
             return 'otro'
 
     estado_inicial = 0
-    estados_finales = [2]
-    estado_salida = 3
+    estado_muerto = 4
+    estado_final = 3
 
     control_local = control
     estado_actual = estado_inicial
@@ -193,17 +194,18 @@ def es_raiz(fuente, control, lexema):
              3: {'asterisco': 3, 'barra': 3, 'otro': 3},
              4: {'asterisco': 4, 'barra': 4, 'otro': 4}}
 
-    while (not (estado_actual == estado_salida)) and (control_local < len(fuente)):
+    while not estado_actual == estado_final and not estado_actual == estado_muerto and control_local < len(fuente):
         caracter_automata = fuente[control_local]
         transicion = caracter_a_simbolo(caracter_automata)
         estado_actual = delta[estado_actual][transicion]
-        if (estado_actual in estados_finales or estado_actual == 1):
-            lexema = lexema + caracter_automata
+        lexema = lexema + caracter_automata
         control_local += 1
-    if (estado_actual in estados_finales or estado_actual == estado_salida):
+    if estado_actual == estado_final:
+        lexema = lexema[:-1]  #This removes the last character
         cadena_aceptada = True
-        control = control_local
+        control = control_local - 1
     return [cadena_aceptada, control, lexema]
+
 
 
 def es_cadena(fuente, control, lexema):
@@ -216,8 +218,8 @@ def es_cadena(fuente, control, lexema):
             return 'otro'
 
     estado_inicial = 0
-    estados_finales = [2]
-    estado_salida = 4
+    estado_muerto = 3
+    estado_final = 4
 
     control_local = control
     estado_actual = estado_inicial
@@ -228,17 +230,19 @@ def es_cadena(fuente, control, lexema):
              3: {'comilla': 3, 'otro': 3},
              4: {'comilla': 4, 'otro': 4}}
 
-    while (not (estado_actual == estado_salida)) and (control_local < len(fuente)):
+    while not estado_actual == estado_final and not estado_actual == estado_muerto and control_local < len(fuente):
         caracter_automata = fuente[control_local]
         transicion = caracter_a_simbolo(caracter_automata)
         estado_actual = delta[estado_actual][transicion]
-        if (estado_actual in estados_finales or estado_actual == 1):
-            lexema = lexema + caracter_automata
+        lexema = lexema + caracter_automata
         control_local += 1
-    if (estado_actual in estados_finales or estado_actual == estado_salida):
+    if estado_actual == estado_final:
+        lexema = lexema[:-1]  #This removes the last character
         cadena_aceptada = True
-        control = control_local
+        control = control_local - 1
     return [cadena_aceptada, control, lexema]
+
+
 
 
 def es_simbolo_gramatical(fuente, control, lexema):
@@ -318,6 +322,13 @@ def es_simbolo_gramatical(fuente, control, lexema):
             aceptado = True
             control_local += 1
             control = control_local
+        case '=':
+            componente_lexico = 'operadorAsignacion'
+            lexema = caracter
+            aceptado = True
+            control_local += 1
+            control = control_local
+
 
         case _:  # Default action if it doesn't match the others
             componente_lexico = 'Error léxico'

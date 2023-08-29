@@ -1,1 +1,1 @@
- 14.2 234 234.2435 ( - */ variable1 **  "esto es una cadena" ; "4w@#$" 21 asdf
+2**6 14.2 234 234.2435 ( - */ variable1 **  "esto es una cadena" ; "4w@#$" 21 asdf
