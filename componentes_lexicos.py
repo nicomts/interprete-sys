@@ -47,7 +47,7 @@ variables = {
     "<OperacionMultiplicacionDivision>",
     "<OperandoMultiplicacionDivision>",
     "<OperacionPotenciaRaiz>",
-    "<SiguientePorenciaRaiz>",
+    "<OperandoPotenciaRaiz>",
     "<Lectura>",
     "<Escritura>",
     "<Condicional>",

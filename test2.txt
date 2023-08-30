@@ -4,13 +4,13 @@ var Elem, Primero, I
 	I = 0;
 	while Elem < 0 and Elem <= 30 {
 		read(Elem);
-		if I===0 {
+		if I==0 {
 			Primero = Elem;
 		};
 		I = I + 1;
 	};
 
-	if Elem === 0 {
+	if Elem == 0 {
 		write("La cantidad de números ingresados fue: ",I);
 	} else {
 		write("El primero ingresado fue: ", Primero);

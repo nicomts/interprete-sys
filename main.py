@@ -34,7 +34,7 @@ def test_analizador_lexico(ruta_archivo):
         print(aux[0] + ': ' + aux[2])
 
 
-test_analizador_lexico('test.txt')
-test_analizador_lexico('test2.txt')
+# test_analizador_lexico('test.txt')
+# test_analizador_lexico('test2.txt')
 
 test_analizador_sintactico('test2.txt')
