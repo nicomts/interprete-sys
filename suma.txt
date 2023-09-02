@@ -1,0 +1,7 @@
+var operando1, operando2
+{
+    read("Ingresar primer numero: ", operando1);
+    read("Ingresar segundo numero: ", operando2);
+    resultado = operando1 + operando2;
+    write("La suma de estos numeros da: ", resultado);
+}
