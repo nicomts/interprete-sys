@@ -30,12 +30,23 @@ def analizador_sintactico(ruta_archivo):
             if a[0] not in tas[x.valor]:
                 error = True
             else:
-                for i in reversed(tas[x.valor][a[0]]):
-                    nuevo_nodo = arbol.NodoArbol(i)
-                    pila.append(nuevo_nodo)
+                nueva_lista = []
                 for i in tas[x.valor][a[0]]:
                     nuevo_nodo = arbol.NodoArbol(i)
                     x.hijos.append(nuevo_nodo)
+                    nueva_lista.append(nuevo_nodo)
+                for i in reversed(nueva_lista):
+                    nodo = nueva_lista.pop()
+                    pila.append(nodo)
+
+
+            # else:
+            #     for i in reversed(tas[x.valor][a[0]]):
+            #         nuevo_nodo = arbol.NodoArbol(i)
+            #         pila.append(nuevo_nodo)
+            #     for i in tas[x.valor][a[0]]:
+            #         nuevo_nodo = arbol.NodoArbol(i)
+            #         x.hijos.append(nuevo_nodo)
 
         elif x.valor == '$':
             exito = True

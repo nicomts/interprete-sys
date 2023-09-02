@@ -2,8 +2,20 @@ from analizador_sintactico import *
 import analizador_lexico
 import tabla_de_simbolos
 
-
 def test_analizador_sintactico(ruta_archivo):
+    a = analizador_sintactico(ruta_archivo)
+    arbol_derivacion = a[0]
+    exito = a[1]
+    error = a[2]
+    arbol_derivacion.imprimir()
+    if exito:
+        print('Éxito')
+    if error:
+        print('Error')
+
+
+
+def test_analizador_sintactico_2(ruta_archivo):
     a = analizador_sintactico(ruta_archivo)
     arbol_derivacion = a[0]
     exito = a[1]
@@ -17,7 +29,7 @@ def test_analizador_sintactico(ruta_archivo):
     dfs(arbol_derivacion)
 
     if exito:
-        print('Exito')
+        print('Éxito')
     if error:
         print('Error')
 

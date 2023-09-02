@@ -3,7 +3,7 @@ var Elem, Primero, I
 	read("Ingresar un número: ", Elem);
 	I = 0;
 	while Elem < 0 and Elem <= 30 {
-		read(Elem);
+		read("cadena", Elem);
 		if I==0 {
 			Primero = Elem;
 		};

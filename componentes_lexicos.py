@@ -27,7 +27,6 @@ terminales = {
     "or",
     "[",
     "]",
-    "$",
     "while"
 }
 

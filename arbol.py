@@ -3,6 +3,17 @@ class NodoArbol:
         self.valor = valor
         self.hijos = hijos if hijos is not None else []
 
+    def __str__(self, nivel=0):
+        resultado = " " * nivel * 4 + "\-- " + str(self.valor) + "\n"
+        for i, hijo in enumerate(self.hijos):
+            resultado += " " * nivel * 4 + "    |-- "
+            resultado += hijo.__str__(nivel + 1)
+        return resultado
+
+    def imprimir(self):
+        print(self.__str__())
+
+
 '''
 
 # Crear un árbol
