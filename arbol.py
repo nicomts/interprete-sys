@@ -1,10 +1,11 @@
 class NodoArbol:
     def __init__(self, valor, hijos=None):
         self.valor = valor
+        self.lexema = ""
         self.hijos = hijos if hijos is not None else []
 
     def __str__(self, nivel=0):
-        resultado = " " * nivel * 4 + "\-- " + str(self.valor) + "\n"
+        resultado = " " * nivel * 4 + "\-- " + str(self.valor) + ': ' + self.lexema +"\n"
         for i, hijo in enumerate(self.hijos):
             resultado += " " * nivel * 4 + "    |-- "
             resultado += hijo.__str__(nivel + 1)

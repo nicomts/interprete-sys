@@ -340,7 +340,7 @@ def obtener_siguiente_componente_lexico(fuente, control, tabla):
         fin_de_archivo = True
 
     if fin_de_archivo is True:
-        componente_lexico = 'Fin de archivo'
+        componente_lexico = '$'
     else:
 
         es_id = es_identificador(fuente, control, lexema)

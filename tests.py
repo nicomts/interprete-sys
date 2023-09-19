@@ -15,6 +15,7 @@ def test_analizador_sintactico(ruta_archivo):
         print('Error')
 
 
+
 def test_analizador_sintactico_2(ruta_archivo):
     a = analizador_sintactico(ruta_archivo)
     arbol_derivacion = a[0]

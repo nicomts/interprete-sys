@@ -5,14 +5,14 @@ tas = {
     },
     '<Declaraciones>': {
         'var': ['var', '<ListaVariables>'],
-        '{': ['epsilon']
+        '{': []
     },
     '<ListaVariables>': {
         'id': ['id', '<FinListaVariables>']
     },
     '<FinListaVariables>': {
         ',': [',', 'id', '<FinListaVariables>'],
-        '{': ['epsilon']
+        '{': []
     },
     '<Cuerpo>': {
         '{': ['{', '<ListaSentencias>', '}']
@@ -30,7 +30,7 @@ tas = {
         'read': ['<Sentencia>', ';', '<ListaSentenciasFin>'],
         'if': ['<Sentencia>', ';', '<ListaSentenciasFin>'],
         'while': ['<Sentencia>', ';', '<ListaSentenciasFin>'],
-        '}': ['epsilon']
+        '}': []
     },
     '<Sentencia>': {
         'id': ['<Asignacion>'],
@@ -49,15 +49,15 @@ tas = {
         '(': ['<OperandoSumaResta>', '<OperacionSumaResta>']
     },
     '<OperacionSumaResta>': {
-        '{': ['epsilon'],
-        ';': ['epsilon'],
+        '{': [],
+        ';': [],
         '+': ['+', '<OperandoSumaResta>', '<OperacionSumaResta>'],
         '-': ['-', '<OperandoSumaResta>', '<OperacionSumaResta>'],
-        ')': ['epsilon'],
-        'operadorRelacional': ['epsilon'],
-        'and': ['epsilon'],
-        'or': ['epsilon'],
-        ']': ['epsilon']
+        ')': [],
+        'operadorRelacional': [],
+        'and': [],
+        'or': [],
+        ']': []
     },
     '<OperandoSumaResta>': {
         'id': ['<OperandoMultiplicacionDivision>', '<OperacionMultiplicacionDivision>'],
@@ -66,17 +66,17 @@ tas = {
         '(': ['<OperandoMultiplicacionDivision>', '<OperacionMultiplicacionDivision>']
     },
     '<OperacionMultiplicacionDivision>': {
-        '{': ['epsilon'],
-        ';': ['epsilon'],
-        '+': ['epsilon'],
-        '-': ['epsilon'],
+        '{': [],
+        ';': [],
+        '+': [],
+        '-': [],
         '*': ['*', '<OperandoMultiplicacionDivision>', '<OperacionMultiplicacionDivision>'],
         '/': ['/', '<OperandoMultiplicacionDivision>', '<OperacionMultiplicacionDivision>'],
-        ')': ['epsilon'],
-        'operadorRelacional': ['epsilon'],
-        'and': ['epsilon'],
-        'or': ['epsilon'],
-        ']': ['epsilon']
+        ')': [],
+        'operadorRelacional': [],
+        'and': [],
+        'or': [],
+        ']': []
     },
     '<OperandoMultiplicacionDivision>': {
         'id': ['<OperandoPotenciaRaiz>', '<OperacionPotenciaRaiz>'],
@@ -85,19 +85,19 @@ tas = {
         '(': ['<OperandoPotenciaRaiz>', '<OperacionPotenciaRaiz>']
     },
     '<OperacionPotenciaRaiz>': {
-        '{': ['epsilon'],
-        ';': ['epsilon'],
-        '+': ['epsilon'],
-        '-': ['epsilon'],
-        '*': ['epsilon'],
-        '/': ['epsilon'],
+        '{': [],
+        ';': [],
+        '+': [],
+        '-': [],
+        '*': [],
+        '/': [],
         '**': ['**', '<OperandoPotenciaRaiz>', '<OperacionPotenciaRaiz>'],
         '*/': ['*/', '<OperandoPotenciaRaiz>', '<OperacionPotenciaRaiz>'],
-        ')': ['epsilon'],
-        'operadorRelacional': ['epsilon'],
-        'and': ['epsilon'],
-        'or': ['epsilon'],
-        ']': ['epsilon']
+        ')': [],
+        'operadorRelacional': [],
+        'and': [],
+        'or': [],
+        ']': []
     },
     '<OperandoPotenciaRaiz>': {
         'id': ['id'],
@@ -115,7 +115,7 @@ tas = {
         'if': ['if', '<Condicion>', '<Cuerpo>', '<FinCondicional>']
     },
     '<FinCondicional>': {
-        ';': ['epsilon'],
+        ';': [],
         'else': ['else', '<Cuerpo>'],
     },
     '<Condicion>': {
@@ -127,10 +127,10 @@ tas = {
         '[': ['<OperandoAndOr>', '<OperacionAndOr>']
     },
     '<OperacionAndOr>': {
-        '{': ['epsilon'],
+        '{': [],
         'and': ['and', '<OperandoAndOr>', '<OperacionAndOr>'],
         'or': ['or', '<OperandoAndOr>', '<OperacionAndOr>'],
-        ']': ['epsilon']
+        ']': []
     },
     '<OperandoAndOr>': {
         'id': ['<ExpresionAritmetica>', 'operadorRelacional', '<ExpresionAritmetica>'],

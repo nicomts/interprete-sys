@@ -23,12 +23,17 @@ def analizador_sintactico(ruta_archivo):
         if x.valor in terminales:
             if x.valor == a[0]:
                 control = a[1]
+                x.lexema = a[2]
                 a = analizador_lexico.obtener_siguiente_componente_lexico(fuente, control, tabla)
             else:
                 error = True
+                print("Se esperaba " + x.valor + ' y se obtuvo ' + a[0])
+                print("Posicion: ", a[1])
         elif x.valor in variables:
             if a[0] not in tas[x.valor]:
                 error = True
+                print("Desde la variable " + x.valor + " no se puede llegar a una cadena que comience con " + a[0])
+                print("Posicion: ", a[1])
             else:
                 nueva_lista = []
                 for i in tas[x.valor][a[0]]:
@@ -48,7 +53,11 @@ def analizador_sintactico(ruta_archivo):
             #         nuevo_nodo = arbol.NodoArbol(i)
             #         x.hijos.append(nuevo_nodo)
 
-        elif x.valor == '$':
+        elif x.valor == '$' and a[0] == '$':
             exito = True
+        else:
+            error = True
+            print("Error: en el tope de la pila se encontro " + x.valor + " y en la entrada " + a[0])
+            print("Posicion: ", a[1])
 
     return [raiz, exito, error]
