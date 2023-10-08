@@ -62,48 +62,74 @@ def eval_sentencia(arbol, estado):
 
 # <Asignacion> ::= "id" "operadorAsignacion" <ExpresionAritmetica>
 def eval_asignacion(arbol, estado):
-    estado, resultado = eval_expresion_aritmetica(arbol.hijos[2], estado)
+    resultado = 0.0
+    estado, resultado = eval_expresion_aritmetica(arbol.hijos[2], estado, resultado)
     estado[arbol.hijos[0].lexema] = resultado
     return estado
 
 # <ExpresionAritmetica> ::= <OperandoSumaResta> <OperacionSumaResta>
-def eval_expresion_aritmetica(arbol, estado):
-    estado = eval_operando_suma_resta(arbol.hijos[0], estado)
-    estado = eval_operacion_suma_resta(arbol.hijos[1], estado)
+def eval_expresion_aritmetica(arbol, estado, resultado):
+    estado, resultado = eval_operando_suma_resta(arbol.hijos[0], estado, resultado)
+    estado, resultado = eval_operacion_suma_resta(arbol.hijos[1], estado, resultado)
     return estado, resultado
 
 # <OperacionSumaResta> ::= "+" <OperandoSumaResta> <OperacionSumaResta> | "-" <OperandoSumaResta> <OperacionSumaResta> | epsilon
-
+def eval_operacion_suma_resta(arbol, estado, resultado):
+    while len(arbol.hijos) > 0:
+        if arbol.hijos[0].valor == '+':
+            estado, resultado_suma_resta = eval_operando_suma_resta(arbol.hijos[1], estado, resultado)
+            estado, resultado_suma_resta = eval_operacion_suma_resta(arbol.hijos[2], estado, resultado_suma_resta)
+            resultado = resultado + resultado_suma_resta
+        elif arbol.hijos[0].valor == '-':
+            estado, resultado_suma_resta = eval_operando_suma_resta(arbol.hijos[1], estado, resultado)
+            estado, resultado_suma_resta = eval_operacion_suma_resta(arbol.hijos[2], estado, resultado_suma_resta)
+            resultado = resultado - resultado_suma_resta
+        return estado, resultado
 
 # <OperandoSumaResta> ::= <OperandoMultiplicacionDivision> <OperacionMultiplicacionDivision>
-def eval_operando_suma_resta(arbol, estado):
-    estado = eval_operando_multiplicacion_division(arbol.hijos[0], estado)
-    estado = eval_operacion_multiplicacion_division(arbol.hijos[1], estado)
-    return estado
+def eval_operando_suma_resta(arbol, estado, resultado):
+    estado, resultado = eval_operando_multiplicacion_division(arbol.hijos[0], estado, resultado)
+    estado, resultado = eval_operacion_multiplicacion_division(arbol.hijos[1], estado, resultado)
+    return estado, resultado
 
 
 # <OperacionMultiplicacionDivision> ::= "*" <OperandoMultiplicacionDivision> <OperacionMultiplicacionDivision> | "/" <OperandoMultiplicacionDivision> <OperacionMultiplicacionDivision> | epsilon
-
+def eval_operacion_multiplicacion_division(arbol, estado, resultado):
+    while len(arbol.hijos) > 0:
+        if arbol.hijos[0].valor == '*':
+            estado, resultado_multiplicacion_division = eval_operando_multiplicacion_division(arbol.hijos[1], estado, resultado)
+            estado, resultado_multiplicacion_division = eval_operacion_multiplicacion_division(arbol.hijos[2], estado, resultado_multiplicacion_division)
+            resultado = resultado * resultado_multiplicacion_division
+        elif arbol.hijos[0].valor == '/':
+            estado, resultado_multiplicacion_division = eval_operando_multiplicacion_division(arbol.hijos[1], estado, resultado)
+            estado, resultado_multiplicacion_division = eval_operacion_multiplicacion_division(arbol.hijos[2], estado, resultado_multiplicacion_division)
+            resultado = resultado / resultado_multiplicacion_division
+        return estado, resultado
 
 # <OperandoMultiplicacionDivision> ::= <OperandoPotenciaRaiz> <OperacionPotenciaRaiz>
-def eval_operando_multiplicacion_division(arbol, estado):
-    estado = eval_operando_potencia_raiz(arbol.hijos[0], estado)
-    estado = eval_operacion_potencia_raiz(arbol.hijos[1], estado)
-    return estado
+def eval_operando_multiplicacion_division(arbol, estado, resultado):
+    estado, resultado = eval_operando_potencia_raiz(arbol.hijos[0], estado, resultado)
+    estado, resultado = eval_operacion_potencia_raiz(arbol.hijos[1], estado, resultado)
+    return estado, resultado
 
 
 # <OperacionPotenciaRaiz> ::= "**" <OperandoPotenciaRaiz> <OperacionPotenciaRaiz> | "*/" <OperandoPotenciaRaiz> <OperacionPotenciaRaiz> | epsilon
 def eval_operacion_potencia_raiz(arbol, estado, resultado):
     while len(arbol.hijos) > 0:
         if arbol.hijos[0].valor == '**':
-            # placeholder
+            estado, resultado_potencia_raiz = eval_operando_potencia_raiz(arbol.hijos[1], estado, resultado)
+            estado, resultado_potencia_raiz = eval_operando_potencia_raiz(arbol.hijos[2], estado, resultado_potencia_raiz)
+            resultado = pow(resultado, resultado_potencia_raiz)
         elif arbol.hijos[0].valor == '*/':
-            # placeholder
+            estado, resultado_potencia_raiz = eval_operando_potencia_raiz(arbol.hijos[1], estado, resultado)
+            estado, resultado_potencia_raiz = eval_operando_potencia_raiz(arbol.hijos[2], estado, resultado_potencia_raiz)
+            resultado = pow(resultado, (1/resultado_potencia_raiz))
+    return estado, resultado
 
 # <OperandoPotenciaRaiz> ::= "(" <ExpresionAritmetica> ")" | "id" | "constanteReal" | "-" <OperandoPotenciaRaiz>
 def eval_operando_potencia_raiz(arbol, estado, resultado):
     if arbol.hijos[0].valor == '(':
-        estado, resultado = eval_expresion_aritmetica(arbol.hijos[1], estado)
+        estado, resultado = eval_expresion_aritmetica(arbol.hijos[1], estado, resultado)
     elif arbol.hijos[0].valor == 'id':
         resultado = estado[arbol.hijos[0].lexema]
     elif arbol.hijos[0].valor == 'constanteReal':
