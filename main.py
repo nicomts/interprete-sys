@@ -3,8 +3,7 @@ from tests import *
 # test_analizador_lexico('test.txt')
 # test_analizador_lexico('test2.txt')
 # test_analizador_sintactico('test2.txt')
-
-test_analizador_sintactico('suma.txt')
+# test_analizador_sintactico('suma.txt')
 
 # <Declaraciones> ::= "var" <ListaVariables> | ε
 def eval_declaraciones(arbol, estado):
@@ -142,13 +141,84 @@ def eval_operando_potencia_raiz(arbol, estado, resultado):
 
 
 # <Lectura> ::= "read" "(" "Cadena" "," "id" ")"
+def eval_lectura(arbol, estado):
+    estado[arbol.hijos[4].lexema] = input(arbol.hijos[2].lexema)
+    return estado
+
 # <Escritura> ::= "write" "(" "Cadena" "," <ExpresionAritmetica> ")"
+def eval_escritura(arbol, estado):
+    estado, resultado = eval_expresion_aritmetica(arbol.hijos[4], estado, 0.0)
+    print(arbol.hijos[2].lexema + str(resultado))
+    return estado
+
+
+
 # <Condicional> ::= "if" <Condicion> <Cuerpo> <FinCondicional>
+def eval_condicional(arbol, estado):
+    condicion = False
+    estado, condicion = eval_condicion(arbol.hijos[1], estado, condicion)
+    if condicion == True:
+        estado = eval_cuerpo(arbol.hijos[2], estado)
+    else:
+        estado = eval_fin_condicional(arbol.hijos[3], estado)
+    return estado
+
 # <FinCondicional> ::= "else" <Cuerpo> | epsilon
+def eval_fin_condicional(arbol, estado):
+    if len(arbol.hijos) > 0:
+        estado = eval_cuerpo(arbol.hijos[1], estado)
+    return estado
+
 # <Condicion> ::= <OperandoAndOr> <OperacionAndOr>
+def eval_condicion(arbol, estado, condicion):
+    estado, condicion = eval_operando_and_or(arbol.hijos[0], estado, condicion)
+    estado, condicion = eval_operacion_and_or(arbol.hijos[1], estado, condicion)
+    return estado, condicion
+
 # <OperacionAndOr> ::= "or" <OperandoAndOr> <OperacionAndOr> | "and" <OperandoAndOr> <OperacionAndOr> | epsilon
+def eval_operacion_and_or(arbol, estado, condicion):
+    while len(arbol.hijos) > 0:
+        if arbol.hijos[0].valor == 'or':
+            estado, condicion_operando = eval_operando_and_or(arbol.hijos[1], estado, condicion)
+            estado, condicion_operando = eval_operacion_and_or(arbol.hijos[2], estado, condicion_operando)
+            condicion = condicion or condicion_operando
+        elif arbol.hijos[0].valor == 'and':
+            estado, condicion_operando = eval_operando_and_or(arbol.hijos[1], estado, condicion)
+            estado, condicion_operando = eval_operacion_and_or(arbol.hijos[2], estado, condicion_operando)
+            condicion = condicion and condicion_operando
+    return estado, condicion
+
 # <OperandoAndOr> ::= <ExpresionAritmetica> "operadorRelacional" <ExpresionAritmetica> | "not" <OperandoAndOr> | "[" <Condicion> "]"
+def eval_operando_and_or(arbol, estado, condicion):
+    if arbol.hijos[0].valor == '<ExpresionAritmetica>':
+        estado, exp1 = eval_expresion_aritmetica(arbol.hijos[0], estado, 0.0)
+        estado, exp2 = eval_expresion_aritmetica(arbol.hijos[2], estado, 0.0)
+        if arbol.hijos[1].lexema == '>':
+            condicion = exp1 > exp2
+        elif arbol.hijos[1].lexema == '<':
+            condicion = exp1 < exp2
+        elif arbol.hijos[1].lexema == '==':
+            condicion = exp1 == exp2
+        elif arbol.hijos[1].lexema == '<=':
+            condicion = exp1 <= exp2
+        elif arbol.hijos[1].lexema == '>=':
+            condicion = exp1 >= exp2
+        elif arbol.hijos[1].lexema == '<>':
+            condicion = exp1 != exp2
+
+    elif arbol.hijos[0].valor == 'not':
+        estado, condicion = eval_operando_and_or(arbol.hijos[1], estado, condicion)
+    elif arbol.hijos[0].valor == '[':
+        estado, condicion = eval_operando_and_or(arbol.hijos[1], estado, condicion)
+    return estado, condicion
+
+
 # <CicloMientras> ::= "while" <Condicion> <Cuerpo>
+def eval_ciclo_mientras(arbol, estado):
+    estado, condicion = eval_condicion(arbol.hijos[1], estado, False)
+    while condicion:
+        estado = eval_cuerpo(arbol.hijos[2], estado)
+    return estado
 
 
 
@@ -175,3 +245,5 @@ def interprete(ruta_archivo):
         evaluador_semantico(arbol_derivacion)
     if error:
         print('Error')
+
+interprete('suma.txt')
