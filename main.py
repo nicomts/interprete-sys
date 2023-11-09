@@ -48,7 +48,7 @@ def eval_sentencia(arbol, estado):
     if arbol.hijos[0].valor == '<Asignacion>':
         estado = eval_asignacion(arbol.hijos[0], estado)
     elif arbol.hijos[0].valor == '<Lectura>':
-        estado = eval_asignacion(arbol.hijos[0], estado)
+        estado = eval_asignacion(arbol.hijos[0], estado) # corregir las variables que son todas asignacion
     elif arbol.hijos[0].valor == '<Escritura>':
         estado = eval_asignacion(arbol.hijos[0], estado)
     elif arbol.hijos[0].valor == '<Condicional>':
@@ -61,34 +61,34 @@ def eval_sentencia(arbol, estado):
 
 # <Asignacion> ::= "id" "operadorAsignacion" <ExpresionAritmetica>
 def eval_asignacion(arbol, estado):
-    resultado = 0.0
-    estado, resultado = eval_expresion_aritmetica(arbol.hijos[2], estado, resultado)
+
+    estado, resultado = eval_expresion_aritmetica(arbol.hijos[2], estado)
     estado[arbol.hijos[0].lexema] = resultado
     return estado
 
 # <ExpresionAritmetica> ::= <OperandoSumaResta> <OperacionSumaResta>
-def eval_expresion_aritmetica(arbol, estado, resultado):
-    estado, resultado = eval_operando_suma_resta(arbol.hijos[0], estado, resultado)
-    estado, resultado = eval_operacion_suma_resta(arbol.hijos[1], estado, resultado)
+def eval_expresion_aritmetica(arbol, estado):
+    estado, operando1 = eval_operando_suma_resta(arbol.hijos[0], estado)
+    estado, resultado = eval_operacion_suma_resta(arbol.hijos[1], estado, operando1)
     return estado, resultado
 
 # <OperacionSumaResta> ::= "+" <OperandoSumaResta> <OperacionSumaResta> | "-" <OperandoSumaResta> <OperacionSumaResta> | epsilon
-def eval_operacion_suma_resta(arbol, estado, resultado):
-    while len(arbol.hijos) > 0:
+def eval_operacion_suma_resta(arbol, estado, operando1):
+    if len(arbol.hijos) > 0:
+        estado, operando2 = eval_operando_suma_resta(arbol.hijos[1], estado)
         if arbol.hijos[0].valor == '+':
-            estado, resultado_suma_resta = eval_operando_suma_resta(arbol.hijos[1], estado, resultado)
-            estado, resultado_suma_resta = eval_operacion_suma_resta(arbol.hijos[2], estado, resultado_suma_resta)
-            resultado = resultado + resultado_suma_resta
+            suma_parcial = operando1 + operando2
         elif arbol.hijos[0].valor == '-':
-            estado, resultado_suma_resta = eval_operando_suma_resta(arbol.hijos[1], estado, resultado)
-            estado, resultado_suma_resta = eval_operacion_suma_resta(arbol.hijos[2], estado, resultado_suma_resta)
-            resultado = resultado - resultado_suma_resta
+            suma_parcial = operando1 - operando2
+        estado, resultado = eval_operacion_suma_resta(arbol.hijos[2], estado, suma_parcial)
         return estado, resultado
+    else:
+        return estado, operando1
 
 # <OperandoSumaResta> ::= <OperandoMultiplicacionDivision> <OperacionMultiplicacionDivision>
-def eval_operando_suma_resta(arbol, estado, resultado):
-    estado, resultado = eval_operando_multiplicacion_division(arbol.hijos[0], estado, resultado)
-    estado, resultado = eval_operacion_multiplicacion_division(arbol.hijos[1], estado, resultado)
+def eval_operando_suma_resta(arbol, estado):
+    estado, operando1 = eval_operando_multiplicacion_division(arbol.hijos[0], estado)
+    estado, resultado = eval_operacion_multiplicacion_division(arbol.hijos[1], estado, operando1)
     return estado, resultado
 
 
@@ -126,16 +126,16 @@ def eval_operacion_potencia_raiz(arbol, estado, resultado):
     return estado, resultado
 
 # <OperandoPotenciaRaiz> ::= "(" <ExpresionAritmetica> ")" | "id" | "constanteReal" | "-" <OperandoPotenciaRaiz>
-def eval_operando_potencia_raiz(arbol, estado, resultado):
+def eval_operando_potencia_raiz(arbol, estado):
     if arbol.hijos[0].valor == '(':
-        estado, resultado = eval_expresion_aritmetica(arbol.hijos[1], estado, resultado)
+        estado, resultado = eval_expresion_aritmetica(arbol.hijos[1], estado)
     elif arbol.hijos[0].valor == 'id':
         resultado = estado[arbol.hijos[0].lexema]
     elif arbol.hijos[0].valor == 'constanteReal':
-        resultado = estado[arbol.hijos[0].lexema]
+        resultado = float(arbol.hijos[0].lexema)
     elif arbol.hijos[0].valor == '-':
-        estado, resultado_potencia_raiz = eval_expresion_aritmetica(arbol.hijos[1], estado, resultado)
-        resultado = resultado - resultado_potencia_raiz
+        estado, resultado_potencia_raiz = eval_operando_potencia_raiz(arbol.hijos[1], estado)
+        resultado = -1 * resultado_potencia_raiz
     return estado, resultado
 
 
@@ -155,9 +155,8 @@ def eval_escritura(arbol, estado):
 
 # <Condicional> ::= "if" <Condicion> <Cuerpo> <FinCondicional>
 def eval_condicional(arbol, estado):
-    condicion = False
-    estado, condicion = eval_condicion(arbol.hijos[1], estado, condicion)
-    if condicion == True:
+    estado, condicion = eval_condicion(arbol.hijos[1], estado)
+    if condicion:
         estado = eval_cuerpo(arbol.hijos[2], estado)
     else:
         estado = eval_fin_condicional(arbol.hijos[3], estado)
@@ -170,9 +169,9 @@ def eval_fin_condicional(arbol, estado):
     return estado
 
 # <Condicion> ::= <OperandoAndOr> <OperacionAndOr>
-def eval_condicion(arbol, estado, condicion):
-    estado, condicion = eval_operando_and_or(arbol.hijos[0], estado, condicion)
-    estado, condicion = eval_operacion_and_or(arbol.hijos[1], estado, condicion)
+def eval_condicion(arbol, estado):
+    estado, operando1 = eval_operando_and_or(arbol.hijos[0], estado)
+    estado, condicion = eval_operacion_and_or(arbol.hijos[1], estado, operando1)
     return estado, condicion
 
 # <OperacionAndOr> ::= "or" <OperandoAndOr> <OperacionAndOr> | "and" <OperandoAndOr> <OperacionAndOr> | epsilon
@@ -189,10 +188,10 @@ def eval_operacion_and_or(arbol, estado, condicion):
     return estado, condicion
 
 # <OperandoAndOr> ::= <ExpresionAritmetica> "operadorRelacional" <ExpresionAritmetica> | "not" <OperandoAndOr> | "[" <Condicion> "]"
-def eval_operando_and_or(arbol, estado, condicion):
-    if arbol.hijos[0].valor == '<ExpresionAritmetica>':
-        estado, exp1 = eval_expresion_aritmetica(arbol.hijos[0], estado, 0.0)
-        estado, exp2 = eval_expresion_aritmetica(arbol.hijos[2], estado, 0.0)
+def eval_operando_and_or(arbol, estado):
+    if arbol.hijos[0].valor == '<ExpresionAritmetica>': # controlar esto
+        estado, exp1 = eval_expresion_aritmetica(arbol.hijos[0], estado)
+        estado, exp2 = eval_expresion_aritmetica(arbol.hijos[2], estado)
         if arbol.hijos[1].lexema == '>':
             condicion = exp1 > exp2
         elif arbol.hijos[1].lexema == '<':
@@ -207,17 +206,20 @@ def eval_operando_and_or(arbol, estado, condicion):
             condicion = exp1 != exp2
 
     elif arbol.hijos[0].valor == 'not':
-        estado, condicion = eval_operando_and_or(arbol.hijos[1], estado, condicion)
+        estado, condicion = eval_operando_and_or(arbol.hijos[1], estado)
+        condicion = not condicion
+
     elif arbol.hijos[0].valor == '[':
-        estado, condicion = eval_operando_and_or(arbol.hijos[1], estado, condicion)
+        estado, condicion = eval_condicion(arbol.hijos[1], estado)
     return estado, condicion
 
 
 # <CicloMientras> ::= "while" <Condicion> <Cuerpo>
 def eval_ciclo_mientras(arbol, estado):
-    estado, condicion = eval_condicion(arbol.hijos[1], estado, False)
+    estado, condicion = eval_condicion(arbol.hijos[1], estado)
     while condicion:
         estado = eval_cuerpo(arbol.hijos[2], estado)
+        estado, condicion = eval_condicion(arbol.hijos[1], estado)
     return estado
 
 
