@@ -97,10 +97,10 @@ def eval_operacion_multiplicacion_division(arbol, estado, operando1):
     if len(arbol.hijos) > 0:
         estado, operando2 = eval_operando_multiplicacion_division(arbol.hijos[1], estado)
         if arbol.hijos[0].valor == '*':
-            multiplicacion_parcial = operando1 * operando2
+            operacion_parcial = operando1 * operando2
         elif arbol.hijos[0].valor == '/':
-            multiplicacion_parcial = operando1 / operando2
-        estado, resultado = eval_operacion_multiplicacion_division(arbol.hijos[2], estado, multiplicacion_parcial)
+            operacion_parcial = operando1 / operando2
+        estado, resultado = eval_operacion_multiplicacion_division(arbol.hijos[2], estado, operacion_parcial)
         return estado, resultado
     else:
         return estado, operando1
@@ -114,17 +114,17 @@ def eval_operando_multiplicacion_division(arbol, estado):
 
 
 # <OperacionPotenciaRaiz> ::= "**" <OperandoPotenciaRaiz> <OperacionPotenciaRaiz> | "*/" <OperandoPotenciaRaiz> <OperacionPotenciaRaiz> | epsilon
-def eval_operacion_potencia_raiz(arbol, estado, resultado):
-    while len(arbol.hijos) > 0:
+def eval_operacion_potencia_raiz(arbol, estado, operando1):
+    if len(arbol.hijos) > 0
+        estado, operando2 = eval_operando_potencia_raiz(arbol.hijos[1], estado)
         if arbol.hijos[0].valor == '**':
-            estado, resultado_potencia_raiz = eval_operando_potencia_raiz(arbol.hijos[1], estado, resultado)
-            estado, resultado_potencia_raiz = eval_operando_potencia_raiz(arbol.hijos[2], estado, resultado_potencia_raiz)
-            resultado = pow(resultado, resultado_potencia_raiz)
+            operacion_parcial = pow(operando1, operando2)
         elif arbol.hijos[0].valor == '*/':
-            estado, resultado_potencia_raiz = eval_operando_potencia_raiz(arbol.hijos[1], estado, resultado)
-            estado, resultado_potencia_raiz = eval_operando_potencia_raiz(arbol.hijos[2], estado, resultado_potencia_raiz)
-            resultado = pow(resultado, (1/resultado_potencia_raiz))
-    return estado, resultado
+            operacion_parcial = pow(operando1, (1/operando2))
+        estado, resultado = eval_operacion_potencia_raiz(arbol.hijos[2], estado, operacion_parcial)
+        return estado, resultado
+    else:
+        return estado, operando1
 
 # <OperandoPotenciaRaiz> ::= "(" <ExpresionAritmetica> ")" | "id" | "constanteReal" | "-" <OperandoPotenciaRaiz>
 def eval_operando_potencia_raiz(arbol, estado):
