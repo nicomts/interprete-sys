@@ -48,13 +48,13 @@ def eval_sentencia(arbol, estado):
     if arbol.hijos[0].valor == '<Asignacion>':
         estado = eval_asignacion(arbol.hijos[0], estado)
     elif arbol.hijos[0].valor == '<Lectura>':
-        estado = eval_asignacion(arbol.hijos[0], estado) # corregir las variables que son todas asignacion
+        estado = eval_lectura(arbol.hijos[0], estado)
     elif arbol.hijos[0].valor == '<Escritura>':
-        estado = eval_asignacion(arbol.hijos[0], estado)
+        estado = eval_escritura(arbol.hijos[0], estado)
     elif arbol.hijos[0].valor == '<Condicional>':
-        estado = eval_asignacion(arbol.hijos[0], estado)
+        estado = eval_condicional(arbol.hijos[0], estado)
     elif arbol.hijos[0].valor == '<CicloMientras>':
-        estado = eval_asignacion(arbol.hijos[0], estado)
+        estado = eval_ciclo_mientras(arbol.hijos[0], estado)
     return estado
 
 
