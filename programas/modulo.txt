@@ -1,0 +1,10 @@
+var dividendo, divisor, resto
+{
+    read("Ingresar dividendo: ", dividendo);
+    read("Ingresar divisor: ", divisor);
+    while dividendo >= divisor {
+        dividendo = dividendo - divisor;
+    };
+    resto = dividendo;
+    write("El resto de la division es: ", resto);
+}
