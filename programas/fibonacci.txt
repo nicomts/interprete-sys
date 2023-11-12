@@ -1,0 +1,28 @@
+var a, b, n, i, resultado
+
+{
+    a = 0;
+    b = 1;
+    i = 2;
+
+    read("Ingresar el numero del termino que se quiere calcular: ", n);
+
+    if n < 0 {
+        write("Ingresar un numero mayor o igual a 0", 0);
+    };
+    if n == 0 {
+        resultado = n;
+    };
+    if n == 1 {
+        resultado = b;
+    } else {
+        while i > 1 and i <= n {
+            c = a + b;
+            a = b;
+            b = c;
+            resultado = b;
+            i = i + 1;
+        };
+    };
+    write("El n-esimo termino de la sucecion de Fibonacci es: ", resultado);
+}
