@@ -107,9 +107,9 @@ def eval_operacion_multiplicacion_division(arbol, estado, operando1):
 
 
 # <OperandoMultiplicacionDivision> ::= <OperandoPotenciaRaiz> <OperacionPotenciaRaiz>
-def eval_operando_multiplicacion_division(arbol, estado, resultado):
-    estado, resultado = eval_operando_potencia_raiz(arbol.hijos[0], estado, resultado)
-    estado, resultado = eval_operacion_potencia_raiz(arbol.hijos[1], estado, resultado)
+def eval_operando_multiplicacion_division(arbol, estado):
+    estado, operando1 = eval_operando_potencia_raiz(arbol.hijos[0], estado)
+    estado, resultado = eval_operacion_potencia_raiz(arbol.hijos[1], estado, operando1)
     return estado, resultado
 
 
