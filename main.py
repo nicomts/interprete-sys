@@ -93,17 +93,18 @@ def eval_operando_suma_resta(arbol, estado):
 
 
 # <OperacionMultiplicacionDivision> ::= "*" <OperandoMultiplicacionDivision> <OperacionMultiplicacionDivision> | "/" <OperandoMultiplicacionDivision> <OperacionMultiplicacionDivision> | epsilon
-def eval_operacion_multiplicacion_division(arbol, estado, resultado):
-    while len(arbol.hijos) > 0:
+def eval_operacion_multiplicacion_division(arbol, estado, operando1):
+    if len(arbol.hijos) > 0:
+        estado, operando2 = eval_operando_multiplicacion_division(arbol.hijos[1], estado)
         if arbol.hijos[0].valor == '*':
-            estado, resultado_multiplicacion_division = eval_operando_multiplicacion_division(arbol.hijos[1], estado, resultado)
-            estado, resultado_multiplicacion_division = eval_operacion_multiplicacion_division(arbol.hijos[2], estado, resultado_multiplicacion_division)
-            resultado = resultado * resultado_multiplicacion_division
+            multiplicacion_parcial = operando1 * operando2
         elif arbol.hijos[0].valor == '/':
-            estado, resultado_multiplicacion_division = eval_operando_multiplicacion_division(arbol.hijos[1], estado, resultado)
-            estado, resultado_multiplicacion_division = eval_operacion_multiplicacion_division(arbol.hijos[2], estado, resultado_multiplicacion_division)
-            resultado = resultado / resultado_multiplicacion_division
+            multiplicacion_parcial = operando1 / operando2
+        estado, resultado = eval_operacion_multiplicacion_division(arbol.hijos[2], estado, multiplicacion_parcial)
         return estado, resultado
+    else:
+        return estado, operando1
+
 
 # <OperandoMultiplicacionDivision> ::= <OperandoPotenciaRaiz> <OperacionPotenciaRaiz>
 def eval_operando_multiplicacion_division(arbol, estado, resultado):
