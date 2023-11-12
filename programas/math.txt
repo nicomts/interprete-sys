@@ -1,0 +1,7 @@
+var op1, op2, total
+{
+    read("", op1);
+    read("", op2);
+    total = (((op1 + op2) * 3) - 25) ** 2;
+    write("", total);
+}

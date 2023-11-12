@@ -1,0 +1,26 @@
+var num1, num2, mcm, mcd
+{
+    read("Ingresar primer numero", num1mcm);
+    read("Ingresar segundo numero", num2mcm);
+
+    num1 = num1mcm;
+    num2 = num1mcm;
+
+    if num1 == 0 {
+        mcd = num2;
+    };
+    while not num2 == 0 {
+        if num1 > num2 {
+            num1 = num1 - num2;
+        } else {
+            num2 = num2 - num1;
+        };
+    };
+    mcd = num1;
+
+    write("Maximo comun divisor: ", mcd);
+
+    mcm = (num1mcm * num2mcm) / mcd;
+    write("Minimo comun multiplo: ", mcm);
+
+}

@@ -250,4 +250,4 @@ def interprete(ruta_archivo):
     if error:
         print('Error')
 
-interprete('suma.txt')
+interprete('programas/mcm.txt')

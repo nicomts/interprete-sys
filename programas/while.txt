@@ -1,0 +1,12 @@
+var counter, times, number, total
+{
+    counter = 0;
+    read("how many times", times);
+    while counter < times {
+        read("input number", number);
+        total = total + number;
+        counter = counter + 1;
+    };
+    write("total", total);
+
+}

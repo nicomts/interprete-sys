@@ -1,0 +1,21 @@
+var num1, num2
+{
+    read("input number 1", num1);
+    read("input number 2", num2);
+    if num1 == num2 {
+        write("they are the same number", num1);
+    } else {
+        write("they are different numbers", 0);
+    };
+
+    if num1 > 0 and num1 <= 13 {
+        write("the thirteenth dilemma", 0);
+    };
+    if num1 == 7 or num1 == 13 {
+        write("lucky number", 0);
+    };
+    if not num1 == 13 {
+        write("not 13", 0);
+    };
+
+}
