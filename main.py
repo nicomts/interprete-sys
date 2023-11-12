@@ -115,7 +115,7 @@ def eval_operando_multiplicacion_division(arbol, estado):
 
 # <OperacionPotenciaRaiz> ::= "**" <OperandoPotenciaRaiz> <OperacionPotenciaRaiz> | "*/" <OperandoPotenciaRaiz> <OperacionPotenciaRaiz> | epsilon
 def eval_operacion_potencia_raiz(arbol, estado, operando1):
-    if len(arbol.hijos) > 0
+    if len(arbol.hijos) > 0:
         estado, operando2 = eval_operando_potencia_raiz(arbol.hijos[1], estado)
         if arbol.hijos[0].valor == '**':
             operacion_parcial = pow(operando1, operando2)
@@ -176,17 +176,18 @@ def eval_condicion(arbol, estado):
     return estado, condicion
 
 # <OperacionAndOr> ::= "or" <OperandoAndOr> <OperacionAndOr> | "and" <OperandoAndOr> <OperacionAndOr> | epsilon
-def eval_operacion_and_or(arbol, estado, condicion):
-    while len(arbol.hijos) > 0:
+def eval_operacion_and_or(arbol, estado, operando1):
+    if len(arbol.hijos) > 0:
+        estado, operando2 = eval_operando_and_or(arbol.hijos[1], estado)
         if arbol.hijos[0].valor == 'or':
-            estado, condicion_operando = eval_operando_and_or(arbol.hijos[1], estado, condicion)
-            estado, condicion_operando = eval_operacion_and_or(arbol.hijos[2], estado, condicion_operando)
-            condicion = condicion or condicion_operando
+            operacion_parcial = operando1 or operando2
         elif arbol.hijos[0].valor == 'and':
-            estado, condicion_operando = eval_operando_and_or(arbol.hijos[1], estado, condicion)
-            estado, condicion_operando = eval_operacion_and_or(arbol.hijos[2], estado, condicion_operando)
-            condicion = condicion and condicion_operando
-    return estado, condicion
+            operacion_parcial = operando1 and operando2
+        estado, resultado = eval_operacion_and_or(arbol.hijos[2], estado, operacion_parcial)
+        return estado, resultado
+    else:
+        return estado, operando1
+
 
 # <OperandoAndOr> ::= <ExpresionAritmetica> "operadorRelacional" <ExpresionAritmetica> | "not" <OperandoAndOr> | "[" <Condicion> "]"
 def eval_operando_and_or(arbol, estado):
