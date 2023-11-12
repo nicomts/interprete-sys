@@ -131,7 +131,7 @@ def eval_operando_potencia_raiz(arbol, estado):
     if arbol.hijos[0].valor == '(':
         estado, resultado = eval_expresion_aritmetica(arbol.hijos[1], estado)
     elif arbol.hijos[0].valor == 'id':
-        resultado = estado[arbol.hijos[0].lexema]
+        resultado = float(estado[arbol.hijos[0].lexema])
     elif arbol.hijos[0].valor == 'constanteReal':
         resultado = float(arbol.hijos[0].lexema)
     elif arbol.hijos[0].valor == '-':
@@ -148,7 +148,7 @@ def eval_lectura(arbol, estado):
 
 # <Escritura> ::= "write" "(" "Cadena" "," <ExpresionAritmetica> ")"
 def eval_escritura(arbol, estado):
-    estado, resultado = eval_expresion_aritmetica(arbol.hijos[4], estado, 0.0)
+    estado, resultado = eval_expresion_aritmetica(arbol.hijos[4], estado)
     print(arbol.hijos[2].lexema + str(resultado))
     return estado
 

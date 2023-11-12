@@ -1,7 +1,8 @@
-var operando1, operando2
+var operando1, operando2, operando3
 {
     read("Ingresar primer numero: ", operando1);
     read("Ingresar segundo numero: ", operando2);
-    resultado = (operando1 + operando2) * 3.5;
+    read("Ingresar tercer numero: ", operando3);
+    resultado = (operando1 + operando2 + operando3);
     write("La suma de estos numeros da: ", resultado);
 }
