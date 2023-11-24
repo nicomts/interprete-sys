@@ -386,6 +386,7 @@ def obtener_siguiente_componente_lexico(fuente, control, tabla):
             componente_lexico = 'Cadena'
             control = cadena[1]
             lexema = cadena[2]
+            lexema = lexema[1:(len(lexema) - 1)]
 
         elif simbolo_gramatical[0]:
             componente_lexico = simbolo_gramatical[3]

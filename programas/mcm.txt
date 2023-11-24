@@ -1,20 +1,27 @@
-var num1, num2, mcm, mcd
+var num1, num2, mcm, mcd, dividendo, divisor
 {
-    read("Ingresar primer numero", num1mcm);
-    read("Ingresar segundo numero", num2mcm);
+    read("Ingresar primer numero: ", num1mcm);
+    read("Ingresar segundo numero: ", num2mcm);
 
     num1 = num1mcm;
-    num2 = num1mcm;
+    num2 = num2mcm;
 
     if num1 == 0 {
         mcd = num2;
     };
-    while not num2 == 0 {
-        if num1 > num2 {
-            num1 = num1 - num2;
-        } else {
-            num2 = num2 - num1;
+
+    while num2 <> 0 {
+        dividendo = num1;
+        divisor = num2;
+        write("dividendo: ", dividendo);
+        write("divisor: ", divisor);
+        while dividendo >= divisor {
+            dividendo = dividendo - divisor;
+            write("resto parcial: ", dividendo);
         };
+        num1 = num2;
+        num2 = dividendo;
+
     };
     mcd = num1;
 
@@ -24,3 +31,4 @@ var num1, num2, mcm, mcd
     write("Minimo comun multiplo: ", mcm);
 
 }
+
